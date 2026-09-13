@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>KBIHU Nurul Jannah - Manasik Haji</title>
+  
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brand: { emerald: '#0f5132', forest: '#14532d', moss: '#1b6e44' } },
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .swal2-popup { border-radius: 1.25rem !important; font-family: "Plus Jakarta Sans", sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased selection:bg-emerald-200">
+  
+  <div class="w-full min-h-screen bg-slate-50 relative flex flex-col pb-10">
+    
+    <!-- STICKY HEADER -->
+    <div class="sticky top-0 z-50 w-full bg-slate-50 shadow-sm">
+      <header class="relative bg-slate-100 text-slate-900 pt-3.5 pb-3.5 px-4 rounded-b-[1.25rem] shadow-sm">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3.5">
+            <div class="flex-shrink-0 h-11 w-auto flex items-center justify-center">
+              <!-- Ganti dengan link logo Anda -->
+              <img src="https://drive.google.com/thumbnail?id=17KxZoH3JrRh49B7AiQY3EfsfAHShYElT" alt="Logo KBIHU" class="h-10 w-auto object-contain">
+            </div>
+            <div class="flex flex-col justify-center">
+              <h1 class="text-base font-bold text-slate-900 leading-tight tracking-wide">
+                KBIHU <span class="italic font-extrabold text-[#0f5132]">Nurul Jannah</span>
+              </h1>
+              <p class="text-[11px] text-slate-600 font-semibold tracking-tight mt-0.5">
+                PT Petrokimia Gresik (Persero)
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- NAVIGATION TABS -->
+      <section class="px-4 mt-3">
+        <div class="p-1 bg-slate-200/80 rounded-xl flex items-center text-xs font-semibold shadow-inner max-w-sm mx-auto">
+          <button onclick="setCategory('Video')" id="tab-Video" class="flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 transition-all font-bold">
+            <i class="fa-solid fa-play-circle text-sm"></i>
+            <span>Video Materi</span>
+          </button>
+          <button onclick="setCategory('Foto')" id="tab-Foto" class="flex-1 py-2 px-3 rounded-lg text-slate-500 hover:text-slate-800 flex items-center justify-center space-x-1.5 transition-all bg-transparent shadow-none font-semibold">
+            <i class="fa-regular fa-image text-sm"></i>
+            <span>Galeri Foto</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- SECTION TITLE -->
+      <div class="flex items-center justify-between px-4 mt-3 pb-2 pt-1 bg-slate-50">
+        <div class="flex items-center space-x-2">
+          <div class="w-1 h-5 bg-[#0f5132] rounded-full"></div>
+          <h2 class="text-base font-extrabold text-slate-900 tracking-tight">Katalog Materi</h2>
+        </div>
+        <span id="videoCount" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-[#0f5132] border border-emerald-200 shadow-sm">
+          Memuat...
+        </span>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 px-4 pt-4 space-y-5">
+      <div id="loading" class="flex justify-center items-center py-12">
+        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-[#0f5132]"></div>
+      </div>
+      <div id="videoContainer" class="flex flex-col gap-5 hidden"></div>
+    </main>
+
+  </div>
+
+  <!-- SCRIPT PENGAMBIL DATA (MENGGANTIKAN google.script.run) -->
+  <script>
+    let allVideos = [];
+    let activeCategory = 'Video'; 
+
+    // URL Web App dari Google Apps Script Anda (Ganti dengan URL /exec Anda)
+    const API_URL = "https://script.google.com/macros/s/AKfycbyo1Z5rG4K2skIQdO-oPPyET1qN3cMiIezlCmd1pkDLEwqkbNwbqYAKWywGCKQEzi1VqA/exec";
+
+    window.onload = function() {
+      fetch(API_URL)
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          displayVideos(data);
+        })
+        .catch(error => {
+          showError(error);
+        });
+    };
+
+    function displayVideos(videos) {
+      allVideos = videos;
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('videoContainer').classList.remove('hidden');
+      renderCards(allVideos);
+    }
+
+    function renderCards(videos) {
+      const container = document.getElementById('videoContainer');
+      container.innerHTML = '';
+
+      const filtered = videos.filter(function(item) {
+        return (item.kategori && item.kategori.toLowerCase().includes(activeCategory.toLowerCase()));
+      });
+      
+      document.getElementById('videoCount').innerText = filtered.length + " " + activeCategory;
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="text-center py-10"><p class="text-slate-500 text-sm font-medium">Data ' + activeCategory + ' belum tersedia.</p></div>';
+        return;
+      }
+
+      filtered.forEach(function(item) {
+        const thumb = item.url_thumbnail || 'https://via.placeholder.com/640x360.png?text=Preview';
+        const kategori = item.kategori || activeCategory;
+        
+        const pemateri = item.pemateri || 'Ustadz Drs. H. Mohamad Molik Latief, MM';
+        const tanggal = item.tanggal || 'Minggu, 13 September 2026';
+        const lokasi = item.lokasi || 'Gresik, Jawa Timur';
+
+        const isFoto = kategori.toLowerCase().includes('foto');
+        const btnText = isFoto ? 'Lihat Foto Sekarang' : 'Tonton Video Sekarang';
+        const btnIcon = isFoto ? 'fa-image' : 'fa-play';
+
+        const card = document.createElement('article');
+        card.className = 'bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-lg hover:shadow-xl transition-shadow duration-300';
+        
+        card.innerHTML = 
+          '<div class="relative w-full aspect-video bg-slate-900 overflow-hidden group cursor-pointer" onclick="playMedia(\'' + item.id_video + '\')">' +
+            '<img alt="Thumbnail" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out" src="' + thumb + '"/>' +
+            '<div class="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none"></div>' +
+            '<div class="absolute top-3 left-3 bg-[#0f5132]/90 backdrop-blur-sm text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md border border-amber-300/30 uppercase tracking-wide flex items-center gap-1.5">' +
+              '<i class="fa-solid fa-tag"></i>' + kategori +
+            '</div>' +
+          '</div>' +
+          
+          '<div class="p-4 space-y-3.5">' +
+            '<div>' +
+              '<h3 class="text-[17px] font-bold text-slate-900 leading-snug tracking-tight line-clamp-2">' + item.judul + '</h3>' +
+              '<p class="text-[13px] text-slate-500 mt-1.5 leading-relaxed line-clamp-2">' + item.deskripsi + '</p>' +
+            '</div>' +
+            
+            '<div class="bg-slate-50 rounded-xl p-3 border border-slate-100 space-y-2 text-[12px] text-slate-600">' +
+              '<div class="flex items-center gap-2">' +
+                '<i class="fa-solid fa-chalkboard-user text-[#0f5132] w-4 text-center"></i>' +
+                '<span class="font-semibold text-slate-800">Pemateri:</span> <span class="truncate">' + pemateri + '</span>' +
+              '</div>' +
+              '<div class="flex items-center gap-2">' +
+                '<i class="fa-regular fa-calendar-days text-[#0f5132] w-4 text-center"></i>' +
+                '<span class="font-semibold text-slate-800">Waktu:</span> <span>' + tanggal + '</span>' +
+              '</div>' +
+              '<div class="flex items-center gap-2">' +
+                '<i class="fa-solid fa-location-dot text-[#0f5132] w-4 text-center"></i>' +
+                '<span class="font-semibold text-slate-800">Lokasi:</span> <span>' + lokasi + '</span>' +
+              '</div>' +
+            '</div>' +
+            
+            '<div class="pt-1">' +
+              '<button class="w-full py-3 px-4 bg-gradient-to-r from-[#117652] to-[#1e9a6e] hover:from-[#0f5132] hover:to-[#117652] text-white font-bold rounded-xl text-sm flex items-center justify-center space-x-2 shadow-md transition duration-150 ease-in-out" onclick="playMedia(\'' + item.id_video + '\')">' +
+                '<i class="fa-solid ' + btnIcon + ' text-sm text-amber-300"></i>' +
+                '<span>' + btnText + '</span>' +
+              '</button>' +
+            '</div>' +
+          '</div>';
+
+        container.appendChild(card);
+      });
+    }
+
+    function setCategory(categoryName) {
+      activeCategory = categoryName;
+      const tabVideo = document.getElementById('tab-Video');
+      const tabFoto = document.getElementById('tab-Foto');
+
+      if (categoryName === 'Video') {
+        tabVideo.className = 'flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 transition-all font-bold';
+        tabFoto.className = 'flex-1 py-2 px-3 rounded-lg text-slate-500 hover:text-slate-800 flex items-center justify-center space-x-1.5 transition-all bg-transparent shadow-none font-semibold';
+      } else {
+        tabFoto.className = 'flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 transition-all font-bold';
+        tabVideo.className = 'flex-1 py-2 px-3 rounded-lg text-slate-500 hover:text-slate-800 flex items-center justify-center space-x-1.5 transition-all bg-transparent shadow-none font-semibold';
+      }
+      renderCards(allVideos); 
+    }
+
+    function playMedia(id) {
+      window.open('https://drive.google.com/file/d/' + id + '/view', '_blank');
+    }
+
+    function showError(error) {
+      document.getElementById('loading').classList.add('hidden');
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal Memuat Data',
+        text: error.message || 'Terjadi kesalahan saat mengambil materi.',
+        confirmButtonColor: '#0f5132',
+        customClass: { popup: 'rounded-2xl' }
+      });
+    }
+  </script>
+</body>
+</html>
