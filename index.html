@@ -46,16 +46,16 @@
               </div>
               <div class="flex flex-col justify-center">
                 <h1 class="text-base font-bold text-slate-900 leading-tight tracking-wide">
-                  Materi <span class="font-extrabold text-[#0f5132]">Manasik Haji</span>
+                  Materi <span class="italic font-extrabold text-[#0f5132]">Manasik Haji</span>
                 </h1>
-                <p class="text-[11px] text-slate-600 font-semibold tracking-tight mt-0.5">Tahun 1448 H / 2027 M</p>
+                <p class="text-[11px] text-slate-600 font-semibold tracking-tight mt-0.5">1448 H / 2027 M</p>
               </div>
             </div>
             
+            <!-- Tombol Tambah Kuning-Hijau -->
             <button onclick="showAddModal()" class="w-9 h-9 bg-gradient-to-br from-amber-500 to-[#0f5132] text-white rounded-full flex items-center justify-center hover:scale-105 shadow-md transition-all focus:outline-none">
               <i class="fa-solid fa-plus text-sm"></i>
             </button>
-            
           </div>
         </header>
 
@@ -73,7 +73,6 @@
         <div class="flex items-center justify-between px-4 mt-3 pb-2 pt-1 bg-slate-50">
           <div class="flex items-center space-x-2">
             <div class="w-1 h-5 bg-[#0f5132] rounded-full"></div>
-            <!-- TEKS JUDUL DINAMIS -->
             <h2 id="katalog-title" class="text-base font-extrabold text-slate-900 tracking-tight">Katalog Materi</h2>
           </div>
           <span id="videoCount" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-[#0f5132] border border-emerald-200 shadow-sm">Memuat...</span>
@@ -93,8 +92,8 @@
     let activeCategory = 'Video'; 
     const CACHE_KEY = 'kbihu_materi_data';
 
-    // PASTIKAN API_URL INI BENAR
-    const API_URL = "https://script.google.com/macros/s/AKfycby5qftusR1nhJq7DxwyOtyc8r2TW_xAUpLvTXKLm7bdUzyZofgbwezemczfERj__LEttQ/exec";
+    // PASTIKAN API URL ANDA BENAR DI SINI (Url yang berakhiran /exec)
+    const API_URL = "https://script.google.com/macros/s/AKfycbwdILFBt9-j3tdGr7eL7EOoQNaqMdmbDwzCB8EAKfQBJArgpHmsqg4I-5KUmsBTtqPKCQ/exec";
 
     window.onload = function() {
       const cachedData = localStorage.getItem(CACHE_KEY);
@@ -140,8 +139,7 @@
         const btnText = isFoto ? 'Lihat Foto' : 'Tonton Video';
         const btnIcon = isFoto ? 'fa-image' : 'fa-play';
         const pemateriHtml = !isFoto ? `<div class="flex items-center gap-2"><i class="fa-solid fa-chalkboard-user text-[#0f5132] w-4 text-center"></i><span class="font-semibold text-slate-800">Pemateri:</span> <span class="truncate">${item.pemateri}</span></div>` : '';
-        
-        const titleIcon = isFoto ? 'fa-images text-amber-500' : 'fa-circle-play text-[#0f5132]';
+        const titleIcon = isFoto ? 'fa-images text-[#1e3a8a]' : 'fa-circle-play text-[#0f5132]';
 
         const card = document.createElement('article');
         card.className = 'bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-lg hover:shadow-xl transition-shadow duration-300';
@@ -308,6 +306,9 @@
       });
     }
 
+    // ==========================================
+    // KUNCI UTAMA: Trik no-cors tanpa response.json()
+    // ==========================================
     function uploadDataToGoogle(data) {
       Swal.fire({ 
         title: 'Sedang Mengunggah...', 
@@ -327,34 +328,30 @@
       params.append('fileName', data.fileName);
       params.append('mimeType', data.mimeType);
 
-      // KUNCI UTAMA: Tambahkan mode 'no-cors' agar browser tidak diblokir Google
+      // fetch menggunakan no-cors
       fetch(API_URL, {
         method: 'POST',
-        mode: 'no-cors', 
+        mode: 'no-cors',
         body: params
       })
-      .then(response => {
-        // Karena pakai no-cors, kita abaikan balasan dari Google.
-        // Asumsinya: jika tidak ada error jaringan, maka data berhasil terkirim.
+      .then(() => {
+        // Karena no-cors, kita abaikan pembacaan json dan anggap berhasil
         localStorage.removeItem(CACHE_KEY); 
         Swal.fire({ 
           icon: 'success', 
           title: 'Berhasil!', 
-          text: 'File sedang diproses oleh sistem Google.', 
+          text: 'File telah dikirim ke server.', 
           confirmButtonColor: '#0f5132', 
           customClass: { popup: 'rounded-[1.5rem]' } 
         }).then(() => {
-          // Beri jeda 1 detik agar Google selesai menyimpan file sebelum refresh
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+          setTimeout(() => { window.location.reload(); }, 1000);
         });
       })
       .catch(error => {
         Swal.fire({ 
           icon: 'error', 
           title: 'Upload Gagal', 
-          text: 'Pastikan koneksi internet Anda stabil.', 
+          text: 'Terjadi masalah jaringan.', 
           confirmButtonColor: '#0f5132', 
           customClass: { popup: 'rounded-[1.5rem]' } 
         });
