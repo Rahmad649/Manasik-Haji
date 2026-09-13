@@ -317,41 +317,35 @@
         didOpen: () => { Swal.showLoading(); } 
       });
 
-      const params = new URLSearchParams();
-      params.append('kategori', data.kategori);
-      params.append('judul', data.judul);
-      params.append('deskripsi', data.deskripsi);
-      params.append('pemateri', data.pemateri);
-      params.append('tanggal', data.tanggal);
-      params.append('lokasi', data.lokasi);
-      params.append('fileBase64', data.fileBase64);
-      params.append('fileName', data.fileName);
-      params.append('mimeType', data.mimeType);
-
-      // fetch menggunakan no-cors
+      // Trik Terkuat: Kirim sebagai text/plain agar Google tidak memblokir dan kita bisa membaca responsnya
       fetch(API_URL, {
         method: 'POST',
-        mode: 'no-cors',
-        body: params
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify(data)
       })
-      .then(() => {
-        // Karena no-cors, kita abaikan pembacaan json dan anggap berhasil
-        localStorage.removeItem(CACHE_KEY); 
-        Swal.fire({ 
-          icon: 'success', 
-          title: 'Berhasil!', 
-          text: 'File telah dikirim ke server.', 
-          confirmButtonColor: '#0f5132', 
-          customClass: { popup: 'rounded-[1.5rem]' } 
-        }).then(() => {
-          setTimeout(() => { window.location.reload(); }, 1000);
-        });
+      .then(response => response.json())
+      .then(res => {
+        if (res.status === 'success') {
+          localStorage.removeItem(CACHE_KEY); 
+          Swal.fire({ 
+            icon: 'success', 
+            title: 'Berhasil!', 
+            text: 'Materi telah masuk ke Spreadsheet.', 
+            confirmButtonColor: '#0f5132', 
+            customClass: { popup: 'rounded-[1.5rem]' } 
+          }).then(() => window.location.reload());
+        } else {
+          // Jika backend gagal, pesan aslinya akan muncul di sini
+          throw new Error(res.message);
+        }
       })
       .catch(error => {
         Swal.fire({ 
           icon: 'error', 
-          title: 'Upload Gagal', 
-          text: 'Terjadi masalah jaringan.', 
+          title: 'Gagal Menyimpan', 
+          text: error.message || 'Koneksi terputus. Silakan coba lagi.', 
           confirmButtonColor: '#0f5132', 
           customClass: { popup: 'rounded-[1.5rem]' } 
         });
