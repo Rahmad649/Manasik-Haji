@@ -23,24 +23,34 @@
     }
   </script>
   <style>
+    /* Mengunci body agar area scroll hanya fokus di dalam kontainer aplikasi */
     html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
-      background-color: #f8fafc;
-      overflow-x: hidden;
+      background-color: #f1f5f9;
+      overflow: hidden;
+    }
+    .app-container {
+      height: 100vh;
+      height: 100dvh; /* Menyesuaikan tinggi dinamis layar HP modern */
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto; /* Area scroll murni di dalam kontainer ini */
+      -webkit-overflow-scrolling: touch;
     }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .swal2-popup { border-radius: 1.25rem !important; font-family: "Plus Jakarta Sans", sans-serif; }
   </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-800 antialiased selection:bg-emerald-200 flex justify-center">
+<body class="bg-slate-200 font-sans text-slate-800 antialiased selection:bg-emerald-200 flex justify-center">
   
-  <!-- Wadah utama berukuran seluler (Mobile Frame Container) -->
-  <div class="w-full max-w-md min-h-screen bg-slate-50 relative flex flex-col shadow-xl">
+  <!-- Wadah utama aplikasi dengan scroll internal -->
+  <div class="w-full max-w-md bg-slate-50 relative flex flex-col shadow-2xl app-container">
     
-    <!-- FIXED HEADER (Terkunci Mutlak di Atas) -->
-    <div class="fixed top-0 left-0 right-0 z-50 w-full max-w-md mx-auto bg-slate-50 shadow-sm">
+    <!-- STICKY HEADER (Terkunci Sempurna di Bagian Atas Kontainer) -->
+    <div class="sticky top-0 z-50 w-full bg-slate-50 shadow-sm flex-shrink-0">
       
       <!-- Top Header -->
       <header class="relative bg-slate-100 text-slate-900 pt-3.5 pb-3.5 px-4 rounded-b-[1.25rem] shadow-sm">
@@ -88,8 +98,8 @@
 
     </div>
 
-    <!-- MAIN CONTENT (Diberi margin-top agar tidak tertutup header yang fixed) -->
-    <main class="flex-1 px-4 pt-[200px] space-y-5 pb-12">
+    <!-- MAIN CONTENT (Area yang bisa digulir ke bawah) -->
+    <main class="flex-1 px-4 pt-3 space-y-5 pb-16">
       <div id="loading" class="flex justify-center items-center py-12">
         <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-[#0f5132]"></div>
       </div>
@@ -217,6 +227,7 @@
       window.open('https://drive.google.com/file/d/' + id + '/view', '_blank');
     }
 
+    // Fungsi fetch wrapper yang kompatibel dengan CORS & JSONP/Text fallback
     function showError(error) {
       document.getElementById('loading').classList.add('hidden');
       Swal.fire({
