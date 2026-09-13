@@ -137,26 +137,55 @@
     </div>
   </div>
 
-  <!-- SCRIPT PENGAMBIL DATA -->
+  <!-- SCRIPT PENGAMBIL DATA (DENGAN SISTEM CACHE SUPER CEPAT) -->
   <script>
     let allVideos = [];
     let activeCategory = 'Video'; 
+    const CACHE_KEY = 'kbihu_materi_data'; // Kunci memori lokal
 
-    // GANTI DENGAN URL DEPLOYMENT BARU ANDA JIKA BERUBAH
-    const API_URL = "https://script.google.com/macros/s/AKfycby5qftusR1nhJq7DxwyOtyc8r2TW_xAUpLvTXKLm7bdUzyZofgbwezemczfERj__LEttQ/exec";
+    // GANTI DENGAN URL DEPLOYMENT ANDA
+    const API_URL = "https://script.google.com/macros/s/AKfycbwdILFBt9-j3tdGr7eL7EOoQNaqMdmbDwzCB8EAKfQBJArgpHmsqg4I-5KUmsBTtqPKCQ/exec";
 
     window.onload = function() {
+      // 1. CEK MEMORI HP DULU: Tampilkan instan jika sudah pernah buka web ini
+      const cachedData = localStorage.getItem(CACHE_KEY);
+      if (cachedData) {
+        try {
+          const parsed = JSON.parse(cachedData);
+          if (parsed && parsed.length > 0) {
+            displayVideos(parsed); // Tampilkan seketika (0 detik loading)
+          }
+        } catch(e) { console.log("Cache error"); }
+      }
+
+      // 2. AMBIL DATA TERBARU DARI GOOGLE SECARA DIAM-DIAM (Background Sync)
       fetch(API_URL)
         .then(response => response.json())
         .then(data => {
           if (data.error) throw new Error(data.error);
-          displayVideos(data);
+          
+          // Simpan data terbaru ke memori HP untuk kunjungan berikutnya
+          localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+          
+          // Perbarui tampilan
+          if (!cachedData) {
+            // Jika baru pertama kali buka (belum ada cache), hilangkan loading
+            displayVideos(data);
+          } else {
+            // Jika sudah pakai cache, perbarui kartu secara mulus di latar belakang
+            allVideos = data;
+            renderCards(allVideos);
+          }
         })
-        .catch(error => showError(error));
+        .catch(error => {
+          // Hanya tampilkan popup error jika memori hp kosong (gagal saat pertama kali buka)
+          if (!cachedData) showError(error);
+        });
     };
 
     function displayVideos(videos) {
       allVideos = videos;
+      // Matikan animasi loading
       document.getElementById('loading').classList.add('hidden');
       document.getElementById('videoContainer').classList.remove('hidden');
       renderCards(allVideos);
@@ -179,60 +208,52 @@
 
       filtered.forEach(function(item) {
         const isFoto = (activeCategory === 'Foto');
-        
-        // Thumbnail: Gunakan URL jika ada, jika kosong ambil thumbnail otomatis Google Drive, jika gagal pakai gambar dummy
-        const thumb = item.url_thumbnail || (item.id_media ? `https://drive.google.com/thumbnail?id=${item.id_media}&sz=w800` : `https://via.placeholder.com/640x360.png?text=Media+Belum+Tersedia`);
-        
+        const thumb = item.url_thumbnail || (item.id_media ? 'https://drive.google.com/thumbnail?id=' + item.id_media + '&sz=w800' : 'https://via.placeholder.com/640x360.png?text=Media+Belum+Tersedia');
         const btnText = isFoto ? 'Lihat Galeri Foto' : 'Tonton Video Sekarang';
         const btnIcon = isFoto ? 'fa-images' : 'fa-play';
 
-        // Hanya tampilkan info pemateri jika Kategori = Video
         let pemateriHtml = '';
         if (!isFoto) {
-          pemateriHtml = `
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-chalkboard-user text-[#0f5132] w-4 text-center"></i>
-              <span class="font-semibold text-slate-800">Pemateri:</span> <span class="truncate">${item.pemateri}</span>
-            </div>`;
+          pemateriHtml = '<div class="flex items-center gap-2"><i class="fa-solid fa-chalkboard-user text-[#0f5132] w-4 text-center"></i><span class="font-semibold text-slate-800">Pemateri:</span> <span class="truncate">' + item.pemateri + '</span></div>';
         }
 
         const card = document.createElement('article');
         card.className = 'bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-lg hover:shadow-xl transition-shadow duration-300';
         
-        card.innerHTML = `
-          <div class="relative w-full aspect-video bg-slate-900 overflow-hidden group cursor-pointer" onclick="playMedia('${item.id_media}')">
-            <img alt="Thumbnail" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out" src="${thumb}"/>
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none"></div>
-            <div class="absolute top-3 left-3 bg-[#0f5132]/90 backdrop-blur-sm text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md border border-amber-300/30 uppercase tracking-wide flex items-center gap-1.5">
-              <i class="fa-solid fa-tag"></i> ${item.kategori}
-            </div>
-          </div>
+        card.innerHTML = 
+          '<div class="relative w-full aspect-video bg-slate-900 overflow-hidden group cursor-pointer" onclick="playMedia(\'' + item.id_media + '\')">' +
+            '<img alt="Thumbnail" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out" src="' + thumb + '"/>' +
+            '<div class="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none"></div>' +
+            '<div class="absolute top-3 left-3 bg-[#0f5132]/90 backdrop-blur-sm text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md border border-amber-300/30 uppercase tracking-wide flex items-center gap-1.5">' +
+              '<i class="fa-solid fa-tag"></i> ' + item.kategori +
+            '</div>' +
+          '</div>' +
           
-          <div class="p-4 space-y-3.5">
-            <div>
-              <h3 class="text-[17px] font-bold text-slate-900 leading-snug tracking-tight line-clamp-2">${item.judul}</h3>
-              <p class="text-[13px] text-slate-500 mt-1.5 leading-relaxed line-clamp-2">${item.deskripsi}</p>
-            </div>
+          '<div class="p-4 space-y-3.5">' +
+            '<div>' +
+              '<h3 class="text-[17px] font-bold text-slate-900 leading-snug tracking-tight line-clamp-2">' + item.judul + '</h3>' +
+              '<p class="text-[13px] text-slate-500 mt-1.5 leading-relaxed line-clamp-2">' + item.deskripsi + '</p>' +
+            '</div>' +
             
-            <div class="bg-slate-50 rounded-xl p-3 border border-slate-100 space-y-2 text-[12px] text-slate-600">
-              ${pemateriHtml}
-              <div class="flex items-center gap-2">
-                <i class="fa-regular fa-calendar-days text-[#0f5132] w-4 text-center"></i>
-                <span class="font-semibold text-slate-800">Waktu:</span> <span>${item.tanggal}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <i class="fa-solid fa-location-dot text-[#0f5132] w-4 text-center"></i>
-                <span class="font-semibold text-slate-800">Lokasi:</span> <span>${item.lokasi}</span>
-              </div>
-            </div>
+            '<div class="bg-slate-50 rounded-xl p-3 border border-slate-100 space-y-2 text-[12px] text-slate-600">' +
+              pemateriHtml +
+              '<div class="flex items-center gap-2">' +
+                '<i class="fa-regular fa-calendar-days text-[#0f5132] w-4 text-center"></i>' +
+                '<span class="font-semibold text-slate-800">Waktu:</span> <span>' + item.tanggal + '</span>' +
+              '</div>' +
+              '<div class="flex items-center gap-2">' +
+                '<i class="fa-solid fa-location-dot text-[#0f5132] w-4 text-center"></i>' +
+                '<span class="font-semibold text-slate-800">Lokasi:</span> <span>' + item.lokasi + '</span>' +
+              '</div>' +
+            '</div>' +
             
-            <div class="pt-1">
-              <button class="w-full py-3 px-4 bg-gradient-to-r from-[#117652] to-[#1e9a6e] hover:from-[#0f5132] hover:to-[#117652] text-white font-bold rounded-xl text-sm flex items-center justify-center space-x-2 shadow-md transition duration-150 ease-in-out" onclick="playMedia('${item.id_media}')">
-                <i class="fa-solid ${btnIcon} text-sm text-amber-300"></i>
-                <span>${btnText}</span>
-              </button>
-            </div>
-          </div>`;
+            '<div class="pt-1">' +
+              '<button class="w-full py-3 px-4 bg-gradient-to-r from-[#117652] to-[#1e9a6e] hover:from-[#0f5132] hover:to-[#117652] text-white font-bold rounded-xl text-sm flex items-center justify-center space-x-2 shadow-md transition duration-150 ease-in-out" onclick="playMedia(\'' + item.id_media + '\')">' +
+                '<i class="fa-solid ' + btnIcon + ' text-sm text-amber-300"></i>' +
+                '<span>' + btnText + '</span>' +
+              '</button>' +
+            '</div>' +
+          '</div>';
 
         container.appendChild(card);
       });
@@ -254,7 +275,6 @@
     }
 
     function playMedia(id) {
-      // Format universal Google Drive untuk membuka File ataupun Folder
       window.open('https://drive.google.com/open?id=' + id, '_blank');
     }
 
@@ -262,8 +282,8 @@
       document.getElementById('loading').classList.add('hidden');
       Swal.fire({
         icon: 'error',
-        title: 'Gagal Memuat Data',
-        text: 'Koneksi lambat atau data belum siap. Silakan refresh halaman.',
+        title: 'Koneksi Terputus',
+        text: 'Pastikan internet Anda stabil, lalu muat ulang halaman.',
         confirmButtonColor: '#0f5132',
         customClass: { popup: 'rounded-2xl' }
       });
