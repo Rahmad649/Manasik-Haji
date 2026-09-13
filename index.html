@@ -317,11 +317,21 @@
         didOpen: () => { Swal.showLoading(); } 
       });
 
-      // Menambahkan redirect: "follow" dan menghilangkan header Content-Type kustom
+      // TRIK MENEMBUS CORS GOOGLE: Ubah format data menjadi URLSearchParams (Form Data)
+      const params = new URLSearchParams();
+      params.append('kategori', data.kategori);
+      params.append('judul', data.judul);
+      params.append('deskripsi', data.deskripsi);
+      params.append('pemateri', data.pemateri);
+      params.append('tanggal', data.tanggal);
+      params.append('lokasi', data.lokasi);
+      params.append('fileBase64', data.fileBase64);
+      params.append('fileName', data.fileName);
+      params.append('mimeType', data.mimeType);
+
       fetch(API_URL, {
         method: 'POST',
-        redirect: 'follow',
-        body: JSON.stringify(data)
+        body: params // Kirim sebagai URL params, bukan JSON stringify
       })
       .then(response => response.json())
       .then(res => {
