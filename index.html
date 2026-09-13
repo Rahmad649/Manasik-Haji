@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-  <title>KBIHU Nurul Jannah - Manasik Haji</title>
+  <title>Materi Manasik Haji</title>
   
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -23,89 +23,118 @@
     }
   </script>
   <style>
-    /* Mengunci body agar area scroll hanya fokus di dalam kontainer aplikasi */
+    /* KUNCI UTAMA: Mematikan total scroll bawaan browser HP */
     html, body {
+      width: 100%;
       height: 100%;
       margin: 0;
       padding: 0;
-      background-color: #f1f5f9;
-      overflow: hidden;
+      overflow: hidden; 
+      background-color: #e2e8f0; /* Warna abu-abu background desktop */
     }
+
+    /* Wadah utama aplikasi */
+    .app-wrapper {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      justify-content: center;
+    }
+
     .app-container {
-      height: 100vh;
-      height: 100dvh; /* Menyesuaikan tinggi dinamis layar HP modern */
+      width: 100%;
+      max-width: 28rem; /* Setara max-w-md */
+      height: 100%;
       display: flex;
       flex-direction: column;
-      overflow-y: auto; /* Area scroll murni di dalam kontainer ini */
-      -webkit-overflow-scrolling: touch;
+      background-color: #f8fafc;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
+
+    /* Header tidak akan pernah bergeser */
+    .header-area {
+      flex-shrink: 0;
+      z-index: 50;
+      background-color: #f8fafc;
+    }
+
+    /* HANYA area ini yang bisa di-scroll */
+    .content-area {
+      flex-grow: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 1rem 1rem 3rem 1rem; /* Padding konten */
+    }
+
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .swal2-popup { border-radius: 1.25rem !important; font-family: "Plus Jakarta Sans", sans-serif; }
   </style>
 </head>
-<body class="bg-slate-200 font-sans text-slate-800 antialiased selection:bg-emerald-200 flex justify-center">
+<body class="font-sans text-slate-800 antialiased selection:bg-emerald-200">
   
-  <!-- Wadah utama aplikasi dengan scroll internal -->
-  <div class="w-full max-w-md bg-slate-50 relative flex flex-col shadow-2xl app-container">
-    
-    <!-- STICKY HEADER (Terkunci Sempurna di Bagian Atas Kontainer) -->
-    <div class="sticky top-0 z-50 w-full bg-slate-50 shadow-sm flex-shrink-0">
+  <!-- Layar Aplikasi Penuh -->
+  <div class="app-wrapper">
+    <div class="app-container">
       
-      <!-- Top Header -->
-      <header class="relative bg-slate-100 text-slate-900 pt-3.5 pb-3.5 px-4 rounded-b-[1.25rem] shadow-sm">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3.5">
-            <div class="flex-shrink-0 h-11 w-auto flex items-center justify-center">
-              <img src="https://drive.google.com/thumbnail?id=17KxZoH3JrRh49B7AiQY3EfsfAHShYElT" alt="Logo KBIHU" class="h-10 w-auto object-contain">
-            </div>
-            <div class="flex flex-col justify-center">
-              <h1 class="text-base font-bold text-slate-900 leading-tight tracking-wide">
-                KBIHU <span class="italic font-extrabold text-[#0f5132]">Nurul Jannah</span>
-              </h1>
-              <p class="text-[11px] text-slate-600 font-semibold tracking-tight mt-0.5">
-                PT Petrokimia Gresik (Persero)
-              </p>
+      <!-- AREA HEADER (FIXED/STICKY) -->
+      <div class="header-area shadow-sm">
+        
+        <!-- Top Header -->
+        <header class="relative bg-slate-100 text-slate-900 pt-3.5 pb-3.5 px-4 rounded-b-[1.25rem] shadow-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3.5">
+              <div class="flex-shrink-0 h-11 w-auto flex items-center justify-center">
+                <img src="https://drive.google.com/thumbnail?id=17KxZoH3JrRh49B7AiQY3EfsfAHShYElT" alt="Logo KBIHU" class="h-10 w-auto object-contain">
+              </div>
+              <div class="flex flex-col justify-center">
+                <!-- Teks diubah sesuai permintaan -->
+                <h1 class="text-base font-bold text-slate-900 leading-tight tracking-wide">
+                  Materi <span class="italic font-extrabold text-[#0f5132]">Manasik Haji</span>
+                </h1>
+                <p class="text-[11px] text-slate-600 font-semibold tracking-tight mt-0.5">
+                  1448 H / 2027 M
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <!-- NAVIGATION TABS -->
-      <section class="px-4 mt-3">
-        <div class="p-1 bg-slate-200/80 rounded-xl flex items-center text-xs font-semibold shadow-inner max-w-sm mx-auto">
-          <button onclick="setCategory('Video')" id="tab-Video" class="flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 transition-all font-bold">
-            <i class="fa-solid fa-play-circle text-sm"></i>
-            <span>Video Materi</span>
-          </button>
-          <button onclick="setCategory('Foto')" id="tab-Foto" class="flex-1 py-2 px-3 rounded-lg text-slate-500 hover:text-slate-800 flex items-center justify-center space-x-1.5 transition-all bg-transparent shadow-none font-semibold">
-            <i class="fa-regular fa-image text-sm"></i>
-            <span>Galeri Foto</span>
-          </button>
-        </div>
-      </section>
+        <!-- NAVIGATION TABS -->
+        <section class="px-4 mt-3">
+          <div class="p-1 bg-slate-200/80 rounded-xl flex items-center text-xs font-semibold shadow-inner max-w-sm mx-auto">
+            <button onclick="setCategory('Video')" id="tab-Video" class="flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 transition-all font-bold">
+              <i class="fa-solid fa-play-circle text-sm"></i>
+              <span>Video Materi</span>
+            </button>
+            <button onclick="setCategory('Foto')" id="tab-Foto" class="flex-1 py-2 px-3 rounded-lg text-slate-500 hover:text-slate-800 flex items-center justify-center space-x-1.5 transition-all bg-transparent shadow-none font-semibold">
+              <i class="fa-regular fa-image text-sm"></i>
+              <span>Galeri Foto</span>
+            </button>
+          </div>
+        </section>
 
-      <!-- SECTION TITLE -->
-      <div class="flex items-center justify-between px-4 mt-3 pb-2 pt-1 bg-slate-50">
-        <div class="flex items-center space-x-2">
-          <div class="w-1 h-5 bg-[#0f5132] rounded-full"></div>
-          <h2 class="text-base font-extrabold text-slate-900 tracking-tight">Katalog Materi</h2>
+        <!-- SECTION TITLE -->
+        <div class="flex items-center justify-between px-4 mt-3 pb-2 pt-1 bg-slate-50">
+          <div class="flex items-center space-x-2">
+            <div class="w-1 h-5 bg-[#0f5132] rounded-full"></div>
+            <h2 class="text-base font-extrabold text-slate-900 tracking-tight">Katalog Materi</h2>
+          </div>
+          <span id="videoCount" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-[#0f5132] border border-emerald-200 shadow-sm">
+            Memuat...
+          </span>
         </div>
-        <span id="videoCount" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-[#0f5132] border border-emerald-200 shadow-sm">
-          Memuat...
-        </span>
       </div>
+
+      <!-- AREA KONTEN (YANG BISA DI-SCROLL) -->
+      <main class="content-area space-y-5">
+        <div id="loading" class="flex justify-center items-center py-12">
+          <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-[#0f5132]"></div>
+        </div>
+        <div id="videoContainer" class="flex flex-col gap-5 hidden"></div>
+      </main>
 
     </div>
-
-    <!-- MAIN CONTENT (Area yang bisa digulir ke bawah) -->
-    <main class="flex-1 px-4 pt-3 space-y-5 pb-16">
-      <div id="loading" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-[#0f5132]"></div>
-      </div>
-      <div id="videoContainer" class="flex flex-col gap-5 hidden"></div>
-    </main>
-
   </div>
 
   <!-- SCRIPT PENGAMBIL DATA -->
@@ -113,20 +142,17 @@
     let allVideos = [];
     let activeCategory = 'Video'; 
 
-    const API_URL = "https://script.google.com/macros/s/AKfycbwdILFBt9-j3tdGr7eL7EOoQNaqMdmbDwzCB8EAKfQBJArgpHmsqg4I-5KUmsBTtqPKCQ/exec";
+    // GANTI DENGAN URL DEPLOYMENT BARU ANDA JIKA BERUBAH
+    const API_URL = "https://script.google.com/macros/s/AKfycby5qftusR1nhJq7DxwyOtyc8r2TW_xAUpLvTXKLm7bdUzyZofgbwezemczfERj__LEttQ/exec";
 
     window.onload = function() {
       fetch(API_URL)
         .then(response => response.json())
         .then(data => {
-          if (data.error) {
-            throw new Error(data.error);
-          }
+          if (data.error) throw new Error(data.error);
           displayVideos(data);
         })
-        .catch(error => {
-          showError(error);
-        });
+        .catch(error => showError(error));
     };
 
     function displayVideos(videos) {
@@ -141,7 +167,7 @@
       container.innerHTML = '';
 
       const filtered = videos.filter(function(item) {
-        return (item.kategori && item.kategori.toLowerCase().includes(activeCategory.toLowerCase()));
+        return (item.kategori && item.kategori.toLowerCase() === activeCategory.toLowerCase());
       });
       
       document.getElementById('videoCount').innerText = filtered.length + " " + activeCategory;
@@ -152,57 +178,61 @@
       }
 
       filtered.forEach(function(item) {
-        const thumb = item.url_thumbnail || 'https://via.placeholder.com/640x360.png?text=Preview';
-        const kategori = item.kategori || activeCategory;
+        const isFoto = (activeCategory === 'Foto');
         
-        const pemateri = item.pemateri || 'Ustadz Drs. H. Mohamad Molik Latief, MM';
-        const tanggal = item.tanggal || 'Minggu, 13 September 2026';
-        const lokasi = item.lokasi || 'Gresik, Jawa Timur';
+        // Thumbnail: Gunakan URL jika ada, jika kosong ambil thumbnail otomatis Google Drive, jika gagal pakai gambar dummy
+        const thumb = item.url_thumbnail || (item.id_media ? `https://drive.google.com/thumbnail?id=${item.id_media}&sz=w800` : `https://via.placeholder.com/640x360.png?text=Media+Belum+Tersedia`);
+        
+        const btnText = isFoto ? 'Lihat Galeri Foto' : 'Tonton Video Sekarang';
+        const btnIcon = isFoto ? 'fa-images' : 'fa-play';
 
-        const isFoto = kategori.toLowerCase().includes('foto');
-        const btnText = isFoto ? 'Lihat Foto Sekarang' : 'Tonton Video Sekarang';
-        const btnIcon = isFoto ? 'fa-image' : 'fa-play';
+        // Hanya tampilkan info pemateri jika Kategori = Video
+        let pemateriHtml = '';
+        if (!isFoto) {
+          pemateriHtml = `
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-chalkboard-user text-[#0f5132] w-4 text-center"></i>
+              <span class="font-semibold text-slate-800">Pemateri:</span> <span class="truncate">${item.pemateri}</span>
+            </div>`;
+        }
 
         const card = document.createElement('article');
         card.className = 'bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-lg hover:shadow-xl transition-shadow duration-300';
         
-        card.innerHTML = 
-          '<div class="relative w-full aspect-video bg-slate-900 overflow-hidden group cursor-pointer" onclick="playMedia(\'' + item.id_video + '\')">' +
-            '<img alt="Thumbnail" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out" src="' + thumb + '"/>' +
-            '<div class="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none"></div>' +
-            '<div class="absolute top-3 left-3 bg-[#0f5132]/90 backdrop-blur-sm text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md border border-amber-300/30 uppercase tracking-wide flex items-center gap-1.5">' +
-              '<i class="fa-solid fa-tag"></i>' + kategori +
-            '</div>' +
-          '</div>' +
+        card.innerHTML = `
+          <div class="relative w-full aspect-video bg-slate-900 overflow-hidden group cursor-pointer" onclick="playMedia('${item.id_media}')">
+            <img alt="Thumbnail" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out" src="${thumb}"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none"></div>
+            <div class="absolute top-3 left-3 bg-[#0f5132]/90 backdrop-blur-sm text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md border border-amber-300/30 uppercase tracking-wide flex items-center gap-1.5">
+              <i class="fa-solid fa-tag"></i> ${item.kategori}
+            </div>
+          </div>
           
-          '<div class="p-4 space-y-3.5">' +
-            '<div>' +
-              '<h3 class="text-[17px] font-bold text-slate-900 leading-snug tracking-tight line-clamp-2">' + item.judul + '</h3>' +
-              '<p class="text-[13px] text-slate-500 mt-1.5 leading-relaxed line-clamp-2">' + item.deskripsi + '</p>' +
-            '</div>' +
+          <div class="p-4 space-y-3.5">
+            <div>
+              <h3 class="text-[17px] font-bold text-slate-900 leading-snug tracking-tight line-clamp-2">${item.judul}</h3>
+              <p class="text-[13px] text-slate-500 mt-1.5 leading-relaxed line-clamp-2">${item.deskripsi}</p>
+            </div>
             
-            '<div class="bg-slate-50 rounded-xl p-3 border border-slate-100 space-y-2 text-[12px] text-slate-600">' +
-              '<div class="flex items-center gap-2">' +
-                '<i class="fa-solid fa-chalkboard-user text-[#0f5132] w-4 text-center"></i>' +
-                '<span class="font-semibold text-slate-800">Pemateri:</span> <span class="truncate">' + pemateri + '</span>' +
-              '</div>' +
-              '<div class="flex items-center gap-2">' +
-                '<i class="fa-regular fa-calendar-days text-[#0f5132] w-4 text-center"></i>' +
-                '<span class="font-semibold text-slate-800">Waktu:</span> <span>' + tanggal + '</span>' +
-              '</div>' +
-              '<div class="flex items-center gap-2">' +
-                '<i class="fa-solid fa-location-dot text-[#0f5132] w-4 text-center"></i>' +
-                '<span class="font-semibold text-slate-800">Lokasi:</span> <span>' + lokasi + '</span>' +
-              '</div>' +
-            '</div>' +
+            <div class="bg-slate-50 rounded-xl p-3 border border-slate-100 space-y-2 text-[12px] text-slate-600">
+              ${pemateriHtml}
+              <div class="flex items-center gap-2">
+                <i class="fa-regular fa-calendar-days text-[#0f5132] w-4 text-center"></i>
+                <span class="font-semibold text-slate-800">Waktu:</span> <span>${item.tanggal}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-location-dot text-[#0f5132] w-4 text-center"></i>
+                <span class="font-semibold text-slate-800">Lokasi:</span> <span>${item.lokasi}</span>
+              </div>
+            </div>
             
-            '<div class="pt-1">' +
-              '<button class="w-full py-3 px-4 bg-gradient-to-r from-[#117652] to-[#1e9a6e] hover:from-[#0f5132] hover:to-[#117652] text-white font-bold rounded-xl text-sm flex items-center justify-center space-x-2 shadow-md transition duration-150 ease-in-out" onclick="playMedia(\'' + item.id_video + '\')">' +
-                '<i class="fa-solid ' + btnIcon + ' text-sm text-amber-300"></i>' +
-                '<span>' + btnText + '</span>' +
-              '</button>' +
-            '</div>' +
-          '</div>';
+            <div class="pt-1">
+              <button class="w-full py-3 px-4 bg-gradient-to-r from-[#117652] to-[#1e9a6e] hover:from-[#0f5132] hover:to-[#117652] text-white font-bold rounded-xl text-sm flex items-center justify-center space-x-2 shadow-md transition duration-150 ease-in-out" onclick="playMedia('${item.id_media}')">
+                <i class="fa-solid ${btnIcon} text-sm text-amber-300"></i>
+                <span>${btnText}</span>
+              </button>
+            </div>
+          </div>`;
 
         container.appendChild(card);
       });
@@ -224,16 +254,16 @@
     }
 
     function playMedia(id) {
-      window.open('https://drive.google.com/file/d/' + id + '/view', '_blank');
+      // Format universal Google Drive untuk membuka File ataupun Folder
+      window.open('https://drive.google.com/open?id=' + id, '_blank');
     }
 
-    // Fungsi fetch wrapper yang kompatibel dengan CORS & JSONP/Text fallback
     function showError(error) {
       document.getElementById('loading').classList.add('hidden');
       Swal.fire({
         icon: 'error',
         title: 'Gagal Memuat Data',
-        text: error.message || 'Terjadi kesalahan saat mengambil materi.',
+        text: 'Koneksi lambat atau data belum siap. Silakan refresh halaman.',
         confirmButtonColor: '#0f5132',
         customClass: { popup: 'rounded-2xl' }
       });
