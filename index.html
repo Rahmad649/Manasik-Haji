@@ -94,7 +94,7 @@
     const CACHE_KEY = 'kbihu_materi_data';
 
     // PASTIKAN API_URL INI BENAR
-    const API_URL = "https://script.google.com/macros/s/AKfycbwdILFBt9-j3tdGr7eL7EOoQNaqMdmbDwzCB8EAKfQBJArgpHmsqg4I-5KUmsBTtqPKCQ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycby5qftusR1nhJq7DxwyOtyc8r2TW_xAUpLvTXKLm7bdUzyZofgbwezemczfERj__LEttQ/exec";
 
     window.onload = function() {
       const cachedData = localStorage.getItem(CACHE_KEY);
@@ -327,28 +327,34 @@
       params.append('fileName', data.fileName);
       params.append('mimeType', data.mimeType);
 
+      // KUNCI UTAMA: Tambahkan mode 'no-cors' agar browser tidak diblokir Google
       fetch(API_URL, {
         method: 'POST',
+        mode: 'no-cors', 
         body: params
       })
-      .then(response => response.json())
-      .then(res => {
-        if (res.status === 'success') {
-          localStorage.removeItem(CACHE_KEY); 
-          Swal.fire({ 
-            icon: 'success', 
-            title: 'Berhasil!', 
-            text: 'File tersimpan di Google Drive.', 
-            confirmButtonColor: '#0f5132', 
-            customClass: { popup: 'rounded-[1.5rem]' } 
-          }).then(() => window.location.reload());
-        } else throw new Error(res.message);
+      .then(response => {
+        // Karena pakai no-cors, kita abaikan balasan dari Google.
+        // Asumsinya: jika tidak ada error jaringan, maka data berhasil terkirim.
+        localStorage.removeItem(CACHE_KEY); 
+        Swal.fire({ 
+          icon: 'success', 
+          title: 'Berhasil!', 
+          text: 'File sedang diproses oleh sistem Google.', 
+          confirmButtonColor: '#0f5132', 
+          customClass: { popup: 'rounded-[1.5rem]' } 
+        }).then(() => {
+          // Beri jeda 1 detik agar Google selesai menyimpan file sebelum refresh
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        });
       })
       .catch(error => {
         Swal.fire({ 
           icon: 'error', 
           title: 'Upload Gagal', 
-          text: error.message || 'Gagal mengirim file. Coba dengan file yang lebih kecil.', 
+          text: 'Pastikan koneksi internet Anda stabil.', 
           confirmButtonColor: '#0f5132', 
           customClass: { popup: 'rounded-[1.5rem]' } 
         });
