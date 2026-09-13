@@ -20,7 +20,9 @@
     .app-wrapper { position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; }
     .app-container { position: relative; width: 100%; max-width: 28rem; height: 100%; display: flex; flex-direction: column; background-color: #f8fafc; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
     .header-area { flex-shrink: 0; z-index: 50; background-color: #f8fafc; }
-    .content-area { flex-grow: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 1rem 1rem 3rem 1rem; }
+    
+    /* overscroll-behavior-y: none Mencegah konflik dengan sistem pull-to-refresh bawaan browser */
+    .content-area { flex-grow: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: none; padding: 0 1rem 3rem 1rem; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     
     .swal2-popup { border-radius: 1.5rem !important; font-family: "Plus Jakarta Sans", sans-serif; padding: 1.5rem !important; }
@@ -36,50 +38,39 @@
   <div class="app-wrapper">
     <div class="app-container">
       
-      <!-- ========================================== -->
-      <!-- SPLASH SCREEN (Dengan Logo Baru) -->
-      <!-- ========================================== -->
+      <!-- SPLASH SCREEN -->
       <div id="splash-screen" class="absolute inset-0 z-[100] bg-slate-50 flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
-        
-        <!-- Wadah Logo Diperlebar agar proporsional -->
         <div class="w-64 h-auto mb-4 animate-pulse">
-          <!-- GANTI TEKS DI BAWAH INI DENGAN ID GOOGLE DRIVE LOGO BARU ANDA -->
           <img src="https://drive.google.com/thumbnail?id=17KxZoH3JrRh49B7AiQY3EfsfAHShYElT" alt="Logo KBIHU" class="w-full h-auto object-contain drop-shadow-xl">
         </div>
+        <h2 class="text-xl font-bold text-slate-900 tracking-wide text-center mt-3">
+          Materi <span class="italic font-extrabold text-[#0f5132]">Manasik Haji</span>
+        </h2>
         <p class="text-[10px] text-slate-500 font-bold mt-1.5 tracking-widest uppercase">Mempersiapkan...</p>
-        
         <div class="mt-8 flex gap-2">
           <div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-bounce" style="animation-delay: 0s"></div>
           <div class="w-2.5 h-2.5 rounded-full bg-[#0f5132] animate-bounce" style="animation-delay: 0.6s"></div>
           <div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-bounce" style="animation-delay: 1.2s"></div>
         </div>
       </div>
-      <!-- ========================================== -->
 
       <!-- AREA HEADER -->
       <div class="header-area shadow-sm">
         <header class="relative bg-slate-100 text-slate-900 pt-3.5 pb-3.5 px-4 rounded-b-[1.25rem] shadow-sm">
           <div class="flex items-center justify-between">
-            
             <div class="flex items-center gap-2.5">
-              <!-- Wadah Logo Header Diperlebar (Lanskap) -->
               <div class="flex-shrink-0 w-28 sm:w-32 h-auto flex items-center justify-center">
-                <!-- GANTI TEKS DI BAWAH INI DENGAN ID GOOGLE DRIVE LOGO BARU ANDA -->
                 <img src="https://drive.google.com/thumbnail?id=17KxZoH3JrRh49B7AiQY3EfsfAHShYElT" alt="Logo KBIHU" class="w-full h-auto object-contain">
               </div>
-              
-              <!-- Garis Pembatas Vertikal yang Elegan -->
               <div class="h-8 w-px bg-slate-300 mx-1"></div>
-              
               <div class="flex flex-col justify-center">
                 <h1 class="text-[13px] font-bold text-slate-900 leading-tight tracking-wide">
-                  Materi <span class="font-extrabold text-[#0f5132]">Manasik</span>
+                  Materi <span class="font-extrabold text-[#0f5132]">Manasik Haji</span>
                 </h1>
                 <p class="text-[10px] text-slate-500 font-semibold tracking-tight mt-0.5">Tahun 1448 H / 2027 M</p>
               </div>
             </div>
             
-            <!-- Tombol Tambah Kuning-Hijau -->
             <button onclick="showAddModal()" class="w-9 h-9 bg-gradient-to-br from-amber-500 to-[#0f5132] text-white rounded-full flex items-center justify-center shrink-0 hover:scale-105 shadow-md transition-all focus:outline-none">
               <i class="fa-solid fa-plus text-sm"></i>
             </button>
@@ -107,8 +98,18 @@
       </div>
 
       <!-- AREA KONTEN -->
-      <main class="content-area space-y-5">
-        <div id="videoContainer" class="flex flex-col gap-5 hidden"></div>
+      <main id="main-content" class="content-area">
+        
+        <!-- PULL TO REFRESH INDICATOR -->
+        <div id="ptr-indicator" class="flex justify-center items-end h-0 overflow-hidden w-full">
+          <div class="bg-white shadow-md rounded-full w-9 h-9 flex items-center justify-center border border-slate-200 mb-4 pointer-events-none">
+            <i class="fa-solid fa-rotate-right text-[#0f5132] text-lg transition-transform duration-100" id="ptr-icon"></i>
+          </div>
+        </div>
+        
+        <div class="space-y-5 pt-2">
+          <div id="videoContainer" class="flex flex-col gap-5 hidden"></div>
+        </div>
       </main>
     </div>
   </div>
@@ -381,15 +382,65 @@
         });
       })
       .catch(error => {
-        Swal.fire({ 
-          icon: 'error', 
-          title: 'Upload Gagal', 
-          text: 'Terjadi masalah jaringan.', 
-          confirmButtonColor: '#0f5132', 
-          customClass: { popup: 'rounded-[1.5rem]' } 
-        });
+        Swal.fire({ icon: 'error', title: 'Upload Gagal', text: 'Terjadi masalah jaringan.', confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-[1.5rem]' } });
       });
     }
+
+    // ==========================================
+    // LOGIKA PULL TO REFRESH (KHUSUS HP)
+    // ==========================================
+    const mainContent = document.getElementById('main-content');
+    const ptrIndicator = document.getElementById('ptr-indicator');
+    const ptrIcon = document.getElementById('ptr-icon');
+    let startY = 0;
+    let isPulling = false;
+
+    mainContent.addEventListener('touchstart', (e) => {
+      // Hanya aktif jika pengguna berada di paling atas layar
+      if (mainContent.scrollTop <= 1) {
+        startY = e.touches[0].clientY;
+        isPulling = true;
+        ptrIndicator.style.transition = 'none'; 
+      }
+    }, {passive: true});
+
+    mainContent.addEventListener('touchmove', (e) => {
+      if (!isPulling) return;
+      const currentY = e.touches[0].clientY;
+      const pullDistance = currentY - startY;
+
+      if (pullDistance > 0 && mainContent.scrollTop <= 1) {
+        // Semakin ditarik, icon meluncur turun dan berputar
+        const height = Math.min(pullDistance * 0.4, 80); 
+        ptrIndicator.style.height = height + 'px';
+        ptrIcon.style.transform = `rotate(${pullDistance * 3}deg)`;
+      } else {
+        isPulling = false; // Batal jika pengguna malah scroll ke bawah
+      }
+    }, {passive: true});
+
+    mainContent.addEventListener('touchend', (e) => {
+      if (!isPulling) return;
+      isPulling = false;
+      ptrIndicator.style.transition = 'height 0.3s ease-out';
+      
+      const currentHeight = parseInt(ptrIndicator.style.height || '0');
+      
+      // Jika ditarik cukup jauh (melewati batas 60px), lakukan Refresh!
+      if (currentHeight >= 60) {
+        ptrIndicator.style.height = '70px';
+        ptrIcon.classList.add('animate-spin');
+        
+        setTimeout(() => {
+          // Hapus cache agar data benar-benar mengambil yang baru dari Google
+          localStorage.removeItem(CACHE_KEY);
+          window.location.reload();
+        }, 600);
+      } else {
+        // Jika tarikan kurang kuat, kembalikan ke atas (batal refresh)
+        ptrIndicator.style.height = '0px';
+      }
+    });
   </script>
 </body>
 </html>
