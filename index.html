@@ -24,16 +24,16 @@
     .content-area { flex-grow: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding: 0 1rem 3rem 1rem; position: relative; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     
-    /* Indikator Refresh Halus */
     #ptr-container { position: absolute; top: 0; left: 0; right: 0; height: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; z-index: 40; pointer-events: none; }
     #ptr-icon-box { transform: translateY(-40px) scale(0.8); opacity: 0; transition: transform 0.15s ease, opacity 0.15s ease; will-change: transform, opacity; }
 
     .swal2-popup { border-radius: 1.5rem !important; font-family: "Plus Jakarta Sans", sans-serif; padding: 1.5rem !important; }
     .swal2-title { font-size: 1.25rem !important; color: #1e293b !important; padding-top: 0 !important; }
-    .custom-input { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.75rem 1rem; font-size: 0.875rem; outline: none; transition: all 0.2s; }
-    .custom-input:focus { border-color: #0f5132; box-shadow: 0 0 0 2px rgba(15, 81, 50, 0.2); }
-    .custom-file-input::file-selector-button { margin-right: 1rem; padding: 0.5rem 1rem; border-radius: 9999px; border: none; font-size: 0.875rem; font-weight: 600; background-color: #ecfdf5; color: #0f5132; cursor: pointer; transition: all 0.2s; }
-    .custom-file-input::file-selector-button:hover { background-color: #d1fae5; }
+    
+    /* CSS Khusus Form Input yang Baru */
+    .custom-input { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.75rem 1rem; font-size: 0.875rem; outline: none; transition: all 0.2s; color: #1e293b; }
+    .custom-input::placeholder { color: #94a3b8; font-weight: 500; }
+    .custom-input:focus { border-color: #0f5132; box-shadow: 0 0 0 3px rgba(15, 81, 50, 0.15); background-color: #ffffff; }
   </style>
 </head>
 <body class="font-sans text-slate-800 antialiased selection:bg-emerald-200">
@@ -67,7 +67,7 @@
                 <h1 class="text-[13px] font-bold text-slate-900 leading-tight tracking-wide">
                   Materi <span class="font-extrabold text-[#0f5132]">Manasik Haji</span>
                 </h1>
-                <p class="text-[10px] text-slate-500 font-semibold tracking-tight mt-0.5">1448 H / 2027 M</p>
+                <p class="text-[10px] text-slate-500 font-semibold tracking-tight mt-0.5">Tahun 1448 H / 2027 M</p>
               </div>
             </div>
             
@@ -117,6 +117,7 @@
     let activeCategory = 'Video'; 
     const CACHE_KEY = 'kbihu_materi_data';
 
+    // PASTIKAN API URL ANDA BENAR DI SINI
     const API_URL = "https://script.google.com/macros/s/AKfycbwdILFBt9-j3tdGr7eL7EOoQNaqMdmbDwzCB8EAKfQBJArgpHmsqg4I-5KUmsBTtqPKCQ/exec";
 
     window.onload = function() {
@@ -174,15 +175,12 @@
         const isFoto = (activeCategory === 'Foto');
         const mediaId = item.id_media ? item.id_media.trim() : '';
         
-        // Deteksi Otomatis: Apakah ini YouTube atau Google Drive?
-        // Jika ID panjang (lebih dari 20 karakter tanpa garis miring/spasi) atau ada URL youtube, tangani khusus.
         const isYouTube = mediaId.length > 0 && (mediaId.length === 11 || mediaId.includes('youtu') || mediaId.length < 15);
         
         let mediaBoxHtml = '';
         let actionBtnHtml = '';
 
         if (isFoto || !isYouTube && mediaId.length > 15) {
-          // --- TAMPILAN GOOGLE DRIVE (FOTO / VIDEO DRIVE) ---
           const thumb = item.url_thumbnail || `https://drive.google.com/thumbnail?id=${mediaId}&sz=w800`;
           const btnText = isFoto ? 'Lihat Foto' : 'Tonton Video Drive';
           const btnIcon = isFoto ? 'fa-image' : 'fa-play';
@@ -199,14 +197,9 @@
             </button>`;
 
         } else {
-          // --- TAMPILAN YOUTUBE PEMUTAR LANGSUNG (EMBEDDED) ---
-          // Ekstrak ID YouTube jika pengguna tak sengaja memasukkan link utuh
           let ytId = mediaId;
-          if (mediaId.includes('v=')) {
-            ytId = mediaId.split('v=')[1]?.split('&')[0];
-          } else if (mediaId.includes('youtu.be/')) {
-            ytId = mediaId.split('youtu.be/')[1]?.split('?')[0];
-          }
+          if (mediaId.includes('v=')) { ytId = mediaId.split('v=')[1]?.split('&')[0]; } 
+          else if (mediaId.includes('youtu.be/')) { ytId = mediaId.split('youtu.be/')[1]?.split('?')[0]; }
 
           mediaBoxHtml = `
             <div class="relative w-full aspect-video bg-slate-900 overflow-hidden">
@@ -275,57 +268,100 @@
       Swal.fire({ icon: 'error', title: 'Terjadi Kesalahan', text: 'Periksa koneksi Anda.', confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-2xl' } });
     }
 
+    // =========================================================
+    // DESAIN FORMULIR BARU (LEBIH ELEGAN & TERSTRUKTUR)
+    // =========================================================
     function showAddModal() {
       const isVideo = activeCategory === 'Video';
+      // Menghapus atribut "capture" agar OS memunculkan opsi Galeri / File Manager
       const acceptType = isVideo ? 'video/*,image/*' : 'image/*';
       
       Swal.fire({
         title: `<span class="font-extrabold text-slate-800 tracking-tight">Upload ${activeCategory}</span>`,
         html: `
-          <div class="text-left space-y-3 mt-4 font-sans">
+          <div class="space-y-4 font-sans text-left mt-3">
+            
+            <!-- Zona Upload File (Dropzone) -->
             <div>
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">File ${activeCategory}</label>
-              <input type="file" id="swal-file" accept="${acceptType}" capture="environment" class="custom-input custom-file-input text-slate-500">
+              <label for="swal-file" class="flex flex-col items-center justify-center w-full h-28 border-2 border-[#0f5132]/30 border-dashed rounded-2xl cursor-pointer bg-emerald-50/50 hover:bg-emerald-50 transition-colors group">
+                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                  <i class="fa-solid fa-cloud-arrow-up text-3xl text-[#0f5132] mb-2 group-hover:scale-110 transition-transform"></i>
+                  <p class="text-sm font-bold text-slate-700">Pilih dari Galeri / Kamera</p>
+                  <p class="text-[10px] text-slate-500 mt-1 uppercase tracking-wider">Maks. 20MB (Video) | Semua Foto</p>
+                </div>
+                <!-- Input asli disembunyikan, event onchange dipakai untuk memunculkan nama file -->
+                <input id="swal-file" type="file" accept="${acceptType}" class="hidden" onchange="
+                  const name = this.files[0] ? this.files[0].name : '';
+                  const display = document.getElementById('file-name-display');
+                  if(name) { display.innerHTML = '<i class=\\'fa-solid fa-check-circle mr-1\\'></i> ' + name; display.classList.remove('hidden'); } else { display.classList.add('hidden'); }
+                " />
+              </label>
+              <div id="file-name-display" class="text-xs text-center text-[#0f5132] font-bold mt-2 hidden bg-emerald-100 p-2 rounded-lg truncate border border-emerald-200"></div>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Judul Materi</label>
-              <input id="swal-judul" class="custom-input" placeholder="Masukkan judul materi...">
+
+            <!-- Pembatas Elegan -->
+            <div class="flex items-center gap-3 py-1">
+              <div class="h-px bg-slate-200 flex-1"></div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Detail Informasi</span>
+              <div class="h-px bg-slate-200 flex-1"></div>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Deskripsi Singkat</label>
-              <textarea id="swal-deskripsi" class="custom-input" placeholder="Tuliskan keterangan..." rows="2"></textarea>
-            </div>
-            ${isVideo ? `
-            <div>
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pemateri / Ustadz</label>
-              <input id="swal-pemateri" class="custom-input" placeholder="Nama Pemateri">
-            </div>` : ''}
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Tanggal</label>
-                <input id="swal-tanggal" class="custom-input" placeholder="Cth: 13 Sep 2026">
+
+            <!-- Kolom Isian dengan Ikon di dalamnya -->
+            <div class="space-y-3">
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <i class="fa-solid fa-heading text-slate-400 text-sm"></i>
+                </div>
+                <input id="swal-judul" class="custom-input pl-10" placeholder="Judul Materi / Foto...">
               </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Lokasi</label>
-                <input id="swal-lokasi" class="custom-input" placeholder="Gresik">
+              
+              <div class="relative">
+                <div class="absolute top-3.5 left-0 pl-3.5 flex items-start pointer-events-none">
+                  <i class="fa-solid fa-align-left text-slate-400 text-sm"></i>
+                </div>
+                <textarea id="swal-deskripsi" class="custom-input pl-10 py-3" placeholder="Tuliskan keterangan singkat..." rows="2"></textarea>
+              </div>
+              
+              ${isVideo ? `
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <i class="fa-solid fa-user-tie text-slate-400 text-sm"></i>
+                </div>
+                <input id="swal-pemateri" class="custom-input pl-10" placeholder="Nama Pemateri / Ustadz">
+              </div>` : ''}
+              
+              <div class="grid grid-cols-2 gap-3">
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-calendar text-slate-400 text-sm"></i>
+                  </div>
+                  <input id="swal-tanggal" class="custom-input pl-10" placeholder="Contoh: 13 Sep 2026">
+                </div>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-location-dot text-slate-400 text-sm"></i>
+                  </div>
+                  <input id="swal-lokasi" class="custom-input pl-10" placeholder="Lokasi">
+                </div>
               </div>
             </div>
+
           </div>
         `,
         showCancelButton: true,
-        confirmButtonText: '<i class="fa-solid fa-cloud-arrow-up mr-2"></i>Upload File',
+        confirmButtonText: '<i class="fa-solid fa-paper-plane mr-2"></i>Kirim & Simpan',
         cancelButtonText: 'Batal',
         buttonsStyling: false,
         customClass: { 
-          confirmButton: 'bg-gradient-to-r from-amber-500 to-[#0f5132] text-white rounded-xl font-bold px-5 py-2.5 shadow-md hover:shadow-lg mr-3 focus:outline-none', 
-          cancelButton: 'bg-slate-200 text-slate-700 hover:bg-slate-300 rounded-xl font-bold px-5 py-2.5 transition-colors focus:outline-none' 
+          confirmButton: 'bg-gradient-to-r from-amber-500 to-[#0f5132] text-white rounded-xl font-bold px-5 py-2.5 shadow-md hover:shadow-lg mr-3 focus:outline-none w-full sm:w-auto mb-2 sm:mb-0', 
+          cancelButton: 'bg-slate-200 text-slate-700 hover:bg-slate-300 rounded-xl font-bold px-5 py-2.5 transition-colors focus:outline-none w-full sm:w-auto' 
         },
         preConfirm: () => {
           const judul = document.getElementById('swal-judul').value.trim();
           const fileInput = document.getElementById('swal-file');
           
           if (!judul || fileInput.files.length === 0) {
-            Swal.showValidationMessage('File dan Judul wajib diisi!');
+            Swal.showValidationMessage('Ups! File dan Judul belum diisi.');
             return false;
           }
           
@@ -422,9 +458,6 @@
       });
     }
 
-    // ==========================================
-    // LOGIKA PULL TO REFRESH HALUS (GPU ACCELERATED)
-    // ==========================================
     const mainContent = document.getElementById('main-content');
     const ptrContainer = document.getElementById('ptr-container');
     const ptrIconBox = document.getElementById('ptr-icon-box');
