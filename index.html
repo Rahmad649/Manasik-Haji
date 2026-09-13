@@ -24,7 +24,7 @@
     .content-area { flex-grow: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding: 0 1rem 3rem 1rem; position: relative; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     
-    /* Indikator Refresh Halus berbasis GPU Acceleration */
+    /* Indikator Refresh Halus */
     #ptr-container { position: absolute; top: 0; left: 0; right: 0; height: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; z-index: 40; pointer-events: none; }
     #ptr-icon-box { transform: translateY(-40px) scale(0.8); opacity: 0; transition: transform 0.15s ease, opacity 0.15s ease; will-change: transform, opacity; }
 
@@ -46,7 +46,7 @@
         <div class="w-64 h-auto mb-4 animate-pulse">
           <img src="https://drive.google.com/thumbnail?id=17KxZoH3JrRh49B7AiQY3EfsfAHShYElT" alt="Logo KBIHU" class="w-full h-auto object-contain drop-shadow-xl">
         </div>
-        <p class="text-[10px] text-slate-500 font-bold mt-1.5 tracking-widest uppercase">Mempersiapkan...</p>
+        <p class="text-[10px] text-slate-500 font-bold mt-1.5 tracking-widest uppercase">Mempersiapkan Halaman...</p>
         <div class="mt-8 flex gap-2">
           <div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-bounce" style="animation-delay: 0s"></div>
           <div class="w-2.5 h-2.5 rounded-full bg-[#0f5132] animate-bounce" style="animation-delay: 0.7s"></div>
@@ -55,7 +55,7 @@
       </div>
 
       <!-- AREA HEADER -->
-      <div class="header-area shadow-sm"> 
+      <div class="header-area shadow-sm">
         <header class="relative bg-slate-100 text-slate-900 pt-3.5 pb-3.5 px-4 rounded-b-[1.25rem] shadow-sm">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2.5">
@@ -99,8 +99,6 @@
 
       <!-- AREA KONTEN -->
       <main id="main-content" class="content-area">
-        
-        <!-- INDIKATOR REFRESH HALUS (GPU ACCELERATED) -->
         <div id="ptr-container">
           <div id="ptr-icon-box" class="bg-white shadow-lg rounded-full w-10 h-10 flex items-center justify-center border border-slate-200">
             <i class="fa-solid fa-rotate-right text-[#0f5132] text-base" id="ptr-icon"></i>
@@ -174,9 +172,53 @@
 
       filtered.forEach(item => {
         const isFoto = (activeCategory === 'Foto');
-        const thumb = item.url_thumbnail || (item.id_media ? `https://drive.google.com/thumbnail?id=${item.id_media}&sz=w800` : `https://via.placeholder.com/640x360.png?text=Media+Tersedia`);
-        const btnText = isFoto ? 'Lihat Foto' : 'Tonton Video';
-        const btnIcon = isFoto ? 'fa-image' : 'fa-play';
+        const mediaId = item.id_media ? item.id_media.trim() : '';
+        
+        // Deteksi Otomatis: Apakah ini YouTube atau Google Drive?
+        // Jika ID panjang (lebih dari 20 karakter tanpa garis miring/spasi) atau ada URL youtube, tangani khusus.
+        const isYouTube = mediaId.length > 0 && (mediaId.length === 11 || mediaId.includes('youtu') || mediaId.length < 15);
+        
+        let mediaBoxHtml = '';
+        let actionBtnHtml = '';
+
+        if (isFoto || !isYouTube && mediaId.length > 15) {
+          // --- TAMPILAN GOOGLE DRIVE (FOTO / VIDEO DRIVE) ---
+          const thumb = item.url_thumbnail || `https://drive.google.com/thumbnail?id=${mediaId}&sz=w800`;
+          const btnText = isFoto ? 'Lihat Foto' : 'Tonton Video Drive';
+          const btnIcon = isFoto ? 'fa-image' : 'fa-play';
+          
+          mediaBoxHtml = `
+            <div class="relative w-full aspect-video bg-slate-900 overflow-hidden group cursor-pointer" onclick="playMedia('${mediaId}')">
+              <img alt="Thumbnail" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out" src="${thumb}"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none"></div>
+            </div>`;
+          
+          actionBtnHtml = `
+            <button class="w-full py-3 px-4 bg-gradient-to-r from-amber-500 to-[#0f5132] text-white font-bold rounded-xl text-sm flex items-center justify-center space-x-2 shadow-md" onclick="playMedia('${mediaId}')">
+              <i class="fa-solid ${btnIcon} text-sm"></i><span>${btnText}</span>
+            </button>`;
+
+        } else {
+          // --- TAMPILAN YOUTUBE PEMUTAR LANGSUNG (EMBEDDED) ---
+          // Ekstrak ID YouTube jika pengguna tak sengaja memasukkan link utuh
+          let ytId = mediaId;
+          if (mediaId.includes('v=')) {
+            ytId = mediaId.split('v=')[1]?.split('&')[0];
+          } else if (mediaId.includes('youtu.be/')) {
+            ytId = mediaId.split('youtu.be/')[1]?.split('?')[0];
+          }
+
+          mediaBoxHtml = `
+            <div class="relative w-full aspect-video bg-slate-900 overflow-hidden">
+              <iframe class="w-full h-full border-0" src="https://www.youtube.com/embed/${ytId}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>`;
+          
+          actionBtnHtml = `
+            <div class="w-full py-2.5 px-4 bg-emerald-50 text-[#0f5132] border border-emerald-200 font-bold rounded-xl text-xs flex items-center justify-center space-x-2">
+              <i class="fa-brands fa-youtube text-red-600 text-sm"></i><span>Video diputar langsung di dalam aplikasi</span>
+            </div>`;
+        }
+
         const pemateriHtml = !isFoto ? `<div class="flex items-center gap-2"><i class="fa-solid fa-chalkboard-user text-[#0f5132] w-4 text-center"></i><span class="font-semibold text-slate-800">Pemateri:</span> <span class="truncate">${item.pemateri}</span></div>` : '';
         const titleIcon = isFoto ? 'fa-images text-amber-500' : 'fa-circle-play text-[#0f5132]';
 
@@ -184,10 +226,7 @@
         card.className = 'bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-lg hover:shadow-xl transition-shadow duration-300';
         
         card.innerHTML = `
-          <div class="relative w-full aspect-video bg-slate-900 overflow-hidden group cursor-pointer" onclick="playMedia('${item.id_media}')">
-            <img alt="Thumbnail" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out" src="${thumb}"/>
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none"></div>
-          </div>
+          ${mediaBoxHtml}
           <div class="p-4 space-y-3.5">
             <div>
               <div class="flex items-start gap-2.5">
@@ -206,9 +245,7 @@
             </div>
             
             <div class="pt-1">
-              <button class="w-full py-3 px-4 bg-gradient-to-r from-amber-500 to-[#0f5132] text-white font-bold rounded-xl text-sm flex items-center justify-center space-x-2 shadow-md" onclick="playMedia('${item.id_media}')">
-                <i class="fa-solid ${btnIcon} text-sm"></i><span>${btnText}</span>
-              </button>
+              ${actionBtnHtml}
             </div>
           </div>`;
         container.appendChild(card);
@@ -412,7 +449,6 @@
       const diff = currentY - startY;
 
       if (diff > 0 && mainContent.scrollTop <= 0) {
-        // Menggunakan kurva resistensi agar tarikan terasa empuk dan tidak melompat-lompat
         const pullDistance = Math.min(diff * 0.45, 90); 
         ptrContainer.style.height = pullDistance + 'px';
         
@@ -435,7 +471,6 @@
       ptrIconBox.style.transition = 'transform 0.25s ease, opacity 0.25s ease';
 
       if (currentHeight >= 55) {
-        // Jika ditarik cukup dalam, kunci di posisi pas dan jalankan animasi putar
         refreshTriggered = true;
         ptrContainer.style.height = '70px';
         ptrIconBox.style.transform = 'translateY(10px) scale(1)';
@@ -447,7 +482,6 @@
           window.location.reload();
         }, 600);
       } else {
-        // Jika tarikan kurang, kembalikan dengan mulus ke atas
         ptrContainer.style.height = '0px';
         ptrIconBox.style.opacity = '0';
         ptrIconBox.style.transform = 'translateY(-40px) scale(0.8)';
