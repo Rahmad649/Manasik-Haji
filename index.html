@@ -13,74 +13,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { brand: { emerald: '#0f5132', forest: '#14532d', moss: '#1b6e44' } },
-          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] }
-        }
-      }
-    }
+    tailwind.config = { theme: { extend: { colors: { brand: { emerald: '#0f5132', forest: '#14532d', moss: '#1b6e44' } }, fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] } } } }
   </script>
   <style>
-    /* KUNCI UTAMA: Mematikan total scroll bawaan browser HP */
-    html, body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden; 
-      background-color: #e2e8f0; /* Warna abu-abu background desktop */
-    }
-
-    /* Wadah utama aplikasi */
-    .app-wrapper {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      display: flex;
-      justify-content: center;
-    }
-
-    .app-container {
-      width: 100%;
-      max-width: 28rem; /* Setara max-w-md */
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      background-color: #f8fafc;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-
-    /* Header tidak akan pernah bergeser */
-    .header-area {
-      flex-shrink: 0;
-      z-index: 50;
-      background-color: #f8fafc;
-    }
-
-    /* HANYA area ini yang bisa di-scroll */
-    .content-area {
-      flex-grow: 1;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 1rem 1rem 3rem 1rem; /* Padding konten */
-    }
-
+    html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #e2e8f0; }
+    .app-wrapper { position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; }
+    .app-container { width: 100%; max-width: 28rem; height: 100%; display: flex; flex-direction: column; background-color: #f8fafc; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+    .header-area { flex-shrink: 0; z-index: 50; background-color: #f8fafc; }
+    .content-area { flex-grow: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 1rem 1rem 3rem 1rem; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .swal2-popup { border-radius: 1.25rem !important; font-family: "Plus Jakarta Sans", sans-serif; }
   </style>
 </head>
 <body class="font-sans text-slate-800 antialiased selection:bg-emerald-200">
   
-  <!-- Layar Aplikasi Penuh -->
   <div class="app-wrapper">
     <div class="app-container">
       
-      <!-- AREA HEADER (FIXED/STICKY) -->
+      <!-- AREA HEADER -->
       <div class="header-area shadow-sm">
-        
-        <!-- Top Header -->
         <header class="relative bg-slate-100 text-slate-900 pt-3.5 pb-3.5 px-4 rounded-b-[1.25rem] shadow-sm">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3.5">
@@ -88,109 +39,79 @@
                 <img src="https://drive.google.com/thumbnail?id=17KxZoH3JrRh49B7AiQY3EfsfAHShYElT" alt="Logo KBIHU" class="h-10 w-auto object-contain">
               </div>
               <div class="flex flex-col justify-center">
-                <!-- Teks diubah sesuai permintaan -->
                 <h1 class="text-base font-bold text-slate-900 leading-tight tracking-wide">
-                  Materi <span class="font-extrabold text-[#0f5132]">Manasik Haji</span>
+                  Materi <span class="italic font-extrabold text-[#0f5132]">Manasik Haji</span>
                 </h1>
-                <p class="text-[11px] text-slate-600 font-semibold tracking-tight mt-0.5">
-                  Tahun 1448 H / 2027 M
-                </p>
+                <p class="text-[11px] text-slate-600 font-semibold tracking-tight mt-0.5">1448 H / 2027 M</p>
               </div>
             </div>
+            
+            <!-- TOMBOL TAMBAH (+) PINDAH KE KANAN ATAS -->
+            <button onclick="showAddModal()" class="w-9 h-9 bg-gradient-to-br from-[#117652] to-[#1e9a6e] text-white rounded-full flex items-center justify-center hover:scale-105 shadow-md transition-all focus:outline-none">
+              <i class="fa-solid fa-plus text-sm"></i>
+            </button>
+            
           </div>
         </header>
 
-        <!-- NAVIGATION TABS -->
         <section class="px-4 mt-3">
           <div class="p-1 bg-slate-200/80 rounded-xl flex items-center text-xs font-semibold shadow-inner max-w-sm mx-auto">
             <button onclick="setCategory('Video')" id="tab-Video" class="flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 transition-all font-bold">
-              <i class="fa-solid fa-play-circle text-sm"></i>
-              <span>Video Materi</span>
+              <i class="fa-solid fa-play-circle text-sm"></i><span>Video Materi</span>
             </button>
             <button onclick="setCategory('Foto')" id="tab-Foto" class="flex-1 py-2 px-3 rounded-lg text-slate-500 hover:text-slate-800 flex items-center justify-center space-x-1.5 transition-all bg-transparent shadow-none font-semibold">
-              <i class="fa-regular fa-image text-sm"></i>
-              <span>Galeri Foto</span>
+              <i class="fa-regular fa-image text-sm"></i><span>Galeri Foto</span>
             </button>
           </div>
         </section>
 
-        <!-- SECTION TITLE -->
         <div class="flex items-center justify-between px-4 mt-3 pb-2 pt-1 bg-slate-50">
           <div class="flex items-center space-x-2">
             <div class="w-1 h-5 bg-[#0f5132] rounded-full"></div>
             <h2 class="text-base font-extrabold text-slate-900 tracking-tight">Katalog Materi</h2>
           </div>
-          <span id="videoCount" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-[#0f5132] border border-emerald-200 shadow-sm">
-            Memuat...
-          </span>
+          <span id="videoCount" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-[#0f5132] border border-emerald-200 shadow-sm">Memuat...</span>
         </div>
       </div>
 
-      <!-- AREA KONTEN (YANG BISA DI-SCROLL) -->
+      <!-- AREA KONTEN -->
       <main class="content-area space-y-5">
-        <div id="loading" class="flex justify-center items-center py-12">
-          <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-[#0f5132]"></div>
-        </div>
+        <div id="loading" class="flex justify-center items-center py-12"><div class="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-[#0f5132]"></div></div>
         <div id="videoContainer" class="flex flex-col gap-5 hidden"></div>
-        <div class="absolute bottom-6 right-6 z-50">
-        <button onclick="showAddModal()" class="w-14 h-14 bg-gradient-to-r from-[#117652] to-[#1e9a6e] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center border-2 border-white/50 focus:outline-none group">
-          <i class="fa-solid fa-plus text-xl group-hover:rotate-90 transition-transform duration-300"></i>
-        </button>
-      </div>
       </main>
-
     </div>
   </div>
 
-  <!-- SCRIPT PENGAMBIL DATA (DENGAN SISTEM CACHE SUPER CEPAT) -->
   <script>
     let allVideos = [];
     let activeCategory = 'Video'; 
-    const CACHE_KEY = 'kbihu_materi_data'; // Kunci memori lokal
+    const CACHE_KEY = 'kbihu_materi_data';
 
-    // GANTI DENGAN URL DEPLOYMENT ANDA
+    // PASTIKAN API_URL INI BENAR (Gunakan link URL terbaru jika berubah setelah Deploy!)
     const API_URL = "https://script.google.com/macros/s/AKfycbwdILFBt9-j3tdGr7eL7EOoQNaqMdmbDwzCB8EAKfQBJArgpHmsqg4I-5KUmsBTtqPKCQ/exec";
 
     window.onload = function() {
-      // 1. CEK MEMORI HP DULU: Tampilkan instan jika sudah pernah buka web ini
       const cachedData = localStorage.getItem(CACHE_KEY);
       if (cachedData) {
         try {
           const parsed = JSON.parse(cachedData);
-          if (parsed && parsed.length > 0) {
-            displayVideos(parsed); // Tampilkan seketika (0 detik loading)
-          }
-        } catch(e) { console.log("Cache error"); }
+          if (parsed && parsed.length > 0) displayVideos(parsed);
+        } catch(e) {}
       }
 
-      // 2. AMBIL DATA TERBARU DARI GOOGLE SECARA DIAM-DIAM (Background Sync)
       fetch(API_URL)
         .then(response => response.json())
         .then(data => {
           if (data.error) throw new Error(data.error);
-          
-          // Simpan data terbaru ke memori HP untuk kunjungan berikutnya
           localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-          
-          // Perbarui tampilan
-          if (!cachedData) {
-            // Jika baru pertama kali buka (belum ada cache), hilangkan loading
-            displayVideos(data);
-          } else {
-            // Jika sudah pakai cache, perbarui kartu secara mulus di latar belakang
-            allVideos = data;
-            renderCards(allVideos);
-          }
+          if (!cachedData) displayVideos(data);
+          else { allVideos = data; renderCards(allVideos); }
         })
-        .catch(error => {
-          // Hanya tampilkan popup error jika memori hp kosong (gagal saat pertama kali buka)
-          if (!cachedData) showError(error);
-        });
+        .catch(error => { if (!cachedData) showError(error); });
     };
 
     function displayVideos(videos) {
       allVideos = videos;
-      // Matikan animasi loading
       document.getElementById('loading').classList.add('hidden');
       document.getElementById('videoContainer').classList.remove('hidden');
       renderCards(allVideos);
@@ -199,227 +120,165 @@
     function renderCards(videos) {
       const container = document.getElementById('videoContainer');
       container.innerHTML = '';
-
-      const filtered = videos.filter(function(item) {
-        return (item.kategori && item.kategori.toLowerCase() === activeCategory.toLowerCase());
-      });
-      
+      const filtered = videos.filter(item => item.kategori && item.kategori.toLowerCase() === activeCategory.toLowerCase());
       document.getElementById('videoCount').innerText = filtered.length + " " + activeCategory;
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div class="text-center py-10"><p class="text-slate-500 text-sm font-medium">Data ' + activeCategory + ' belum tersedia.</p></div>';
+        container.innerHTML = '<div class="text-center py-10"><p class="text-slate-500 text-sm font-medium">Data belum tersedia.</p></div>';
         return;
       }
 
-      filtered.forEach(function(item) {
+      filtered.forEach(item => {
         const isFoto = (activeCategory === 'Foto');
-        const thumb = item.url_thumbnail || (item.id_media ? 'https://drive.google.com/thumbnail?id=' + item.id_media + '&sz=w800' : 'https://via.placeholder.com/640x360.png?text=Media+Belum+Tersedia');
-        const btnText = isFoto ? 'Lihat Galeri Foto' : 'Tonton Video Sekarang';
-        const btnIcon = isFoto ? 'fa-images' : 'fa-play';
-
-        let pemateriHtml = '';
-        if (!isFoto) {
-          pemateriHtml = '<div class="flex items-center gap-2"><i class="fa-solid fa-chalkboard-user text-[#0f5132] w-4 text-center"></i><span class="font-semibold text-slate-800">Pemateri:</span> <span class="truncate">' + item.pemateri + '</span></div>';
-        }
+        const thumb = item.url_thumbnail || (item.id_media ? `https://drive.google.com/thumbnail?id=${item.id_media}&sz=w800` : `https://via.placeholder.com/640x360.png?text=Media+Tersedia`);
+        const btnText = isFoto ? 'Lihat Foto' : 'Tonton Video';
+        const btnIcon = isFoto ? 'fa-image' : 'fa-play';
+        const pemateriHtml = !isFoto ? `<div class="flex items-center gap-2"><i class="fa-solid fa-chalkboard-user text-[#0f5132] w-4 text-center"></i><span class="font-semibold text-slate-800">Pemateri:</span> <span class="truncate">${item.pemateri}</span></div>` : '';
 
         const card = document.createElement('article');
         card.className = 'bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-lg hover:shadow-xl transition-shadow duration-300';
-        
-        card.innerHTML = 
-          '<div class="relative w-full aspect-video bg-slate-900 overflow-hidden group cursor-pointer" onclick="playMedia(\'' + item.id_media + '\')">' +
-            '<img alt="Thumbnail" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out" src="' + thumb + '"/>' +
-            '<div class="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none"></div>' +
-            '<div class="absolute top-3 left-3 bg-[#0f5132]/90 backdrop-blur-sm text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md border border-amber-300/30 uppercase tracking-wide flex items-center gap-1.5">' +
-              '<i class="fa-solid fa-tag"></i> ' + item.kategori +
-            '</div>' +
-          '</div>' +
-          
-          '<div class="p-4 space-y-3.5">' +
-            '<div>' +
-              '<h3 class="text-[17px] font-bold text-slate-900 leading-snug tracking-tight line-clamp-2">' + item.judul + '</h3>' +
-              '<p class="text-[13px] text-slate-500 mt-1.5 leading-relaxed line-clamp-2">' + item.deskripsi + '</p>' +
-            '</div>' +
-            
-            '<div class="bg-slate-50 rounded-xl p-3 border border-slate-100 space-y-2 text-[12px] text-slate-600">' +
-              pemateriHtml +
-              '<div class="flex items-center gap-2">' +
-                '<i class="fa-regular fa-calendar-days text-[#0f5132] w-4 text-center"></i>' +
-                '<span class="font-semibold text-slate-800">Waktu:</span> <span>' + item.tanggal + '</span>' +
-              '</div>' +
-              '<div class="flex items-center gap-2">' +
-                '<i class="fa-solid fa-location-dot text-[#0f5132] w-4 text-center"></i>' +
-                '<span class="font-semibold text-slate-800">Lokasi:</span> <span>' + item.lokasi + '</span>' +
-              '</div>' +
-            '</div>' +
-            
-            '<div class="pt-1">' +
-              '<button class="w-full py-3 px-4 bg-gradient-to-r from-[#117652] to-[#1e9a6e] hover:from-[#0f5132] hover:to-[#117652] text-white font-bold rounded-xl text-sm flex items-center justify-center space-x-2 shadow-md transition duration-150 ease-in-out" onclick="playMedia(\'' + item.id_media + '\')">' +
-                '<i class="fa-solid ' + btnIcon + ' text-sm text-amber-300"></i>' +
-                '<span>' + btnText + '</span>' +
-              '</button>' +
-            '</div>' +
-          '</div>';
-
+        card.innerHTML = `
+          <div class="relative w-full aspect-video bg-slate-900 overflow-hidden group cursor-pointer" onclick="playMedia('${item.id_media}')">
+            <img alt="Thumbnail" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out" src="${thumb}"/>
+            <div class="absolute top-3 left-3 bg-[#0f5132]/90 backdrop-blur-sm text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase flex items-center gap-1.5">
+              <i class="fa-solid fa-tag"></i> ${item.kategori}
+            </div>
+          </div>
+          <div class="p-4 space-y-3.5">
+            <div>
+              <h3 class="text-[17px] font-bold text-slate-900 leading-snug tracking-tight line-clamp-2">${item.judul}</h3>
+              <p class="text-[13px] text-slate-500 mt-1.5 leading-relaxed line-clamp-2">${item.deskripsi}</p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-3 border border-slate-100 space-y-2 text-[12px] text-slate-600">
+              ${pemateriHtml}
+              <div class="flex items-center gap-2"><i class="fa-regular fa-calendar-days text-[#0f5132] w-4 text-center"></i><span class="font-semibold text-slate-800">Waktu:</span> <span>${item.tanggal}</span></div>
+              <div class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-[#0f5132] w-4 text-center"></i><span class="font-semibold text-slate-800">Lokasi:</span> <span>${item.lokasi}</span></div>
+            </div>
+            <div class="pt-1">
+              <button class="w-full py-3 px-4 bg-gradient-to-r from-[#117652] to-[#1e9a6e] text-white font-bold rounded-xl text-sm flex items-center justify-center space-x-2 shadow-md" onclick="playMedia('${item.id_media}')">
+                <i class="fa-solid ${btnIcon} text-sm text-amber-300"></i><span>${btnText}</span>
+              </button>
+            </div>
+          </div>`;
         container.appendChild(card);
       });
     }
 
     function setCategory(categoryName) {
       activeCategory = categoryName;
-      const tabVideo = document.getElementById('tab-Video');
-      const tabFoto = document.getElementById('tab-Foto');
-
+      const tV = document.getElementById('tab-Video'), tF = document.getElementById('tab-Foto');
       if (categoryName === 'Video') {
-        tabVideo.className = 'flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 transition-all font-bold';
-        tabFoto.className = 'flex-1 py-2 px-3 rounded-lg text-slate-500 hover:text-slate-800 flex items-center justify-center space-x-1.5 transition-all bg-transparent shadow-none font-semibold';
+        tV.className = 'flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 font-bold';
+        tF.className = 'flex-1 py-2 px-3 rounded-lg text-slate-500 flex items-center justify-center space-x-1.5 font-semibold bg-transparent';
       } else {
-        tabFoto.className = 'flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 transition-all font-bold';
-        tabVideo.className = 'flex-1 py-2 px-3 rounded-lg text-slate-500 hover:text-slate-800 flex items-center justify-center space-x-1.5 transition-all bg-transparent shadow-none font-semibold';
+        tF.className = 'flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 font-bold';
+        tV.className = 'flex-1 py-2 px-3 rounded-lg text-slate-500 flex items-center justify-center space-x-1.5 font-semibold bg-transparent';
       }
       renderCards(allVideos); 
     }
 
-    function playMedia(id) {
-      window.open('https://drive.google.com/open?id=' + id, '_blank');
-    }
+    function playMedia(id) { window.open('https://drive.google.com/open?id=' + id, '_blank'); }
 
     function showError(error) {
       document.getElementById('loading').classList.add('hidden');
-      Swal.fire({
-        icon: 'error',
-        title: 'Koneksi Terputus',
-        text: 'Pastikan internet Anda stabil, lalu muat ulang halaman.',
-        confirmButtonColor: '#0f5132',
-        customClass: { popup: 'rounded-2xl' }
-      });
+      Swal.fire({ icon: 'error', title: 'Terjadi Kesalahan', text: 'Periksa koneksi Anda.', confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-2xl' } });
     }
 
+    // --- FITUR BARU: FORM POPUP & UPLOAD FILE ---
     function showAddModal() {
       const isVideo = activeCategory === 'Video';
+      const acceptType = isVideo ? 'video/*,image/*' : 'image/*'; // Membuka galeri/kamera
       
       Swal.fire({
-        title: '<span class="text-xl font-extrabold text-slate-800">Tambah ' + activeCategory + '</span>',
+        title: '<span class="text-xl font-extrabold text-slate-800">Upload ' + activeCategory + '</span>',
         html: `
-          <div class="text-left space-y-4 mt-2 font-sans">
+          <div class="text-left space-y-3 mt-2 font-sans">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Ambil / Pilih File</label>
+              <input type="file" id="swal-file" accept="${acceptType}" capture="environment" class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:font-semibold file:bg-emerald-50 file:text-[#0f5132] hover:file:bg-emerald-100 cursor-pointer outline-none">
+            </div>
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-1">Judul ${activeCategory}</label>
-              <input id="swal-judul" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-[#0f5132] outline-none transition" placeholder="Masukkan judul">
+              <input id="swal-judul" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-[#0f5132] outline-none" placeholder="Masukkan judul">
             </div>
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-1">Deskripsi</label>
-              <textarea id="swal-deskripsi" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-[#0f5132] outline-none transition" placeholder="Tuliskan deskripsi singkat" rows="2"></textarea>
+              <textarea id="swal-deskripsi" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-[#0f5132] outline-none" placeholder="Keterangan singkat" rows="2"></textarea>
             </div>
             ${isVideo ? `
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-1">Pemateri</label>
-              <input id="swal-pemateri" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-[#0f5132] outline-none transition" placeholder="Nama Pemateri / Ustadz">
-            </div>
-            ` : ''}
+              <input id="swal-pemateri" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-[#0f5132] outline-none" placeholder="Nama Ustadz">
+            </div>` : ''}
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Tanggal</label>
-                <input id="swal-tanggal" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-[#0f5132] outline-none transition" placeholder="Cth: 13 Sep 2026">
+                <input id="swal-tanggal" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-[#0f5132] outline-none" placeholder="Cth: 13 Sep 2026">
               </div>
               <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">Lokasi</label>
-                <input id="swal-lokasi" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-[#0f5132] outline-none transition" placeholder="Gresik">
+                <input id="swal-lokasi" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-[#0f5132] outline-none" placeholder="Gresik">
               </div>
-            </div>
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1">ID Google Drive</label>
-              <input id="swal-id_media" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-[#0f5132] outline-none transition" placeholder="Paste ID Video atau Folder Foto">
-              <p class="text-[10px] text-slate-500 mt-1">*Ambil ID unik dari URL Google Drive Anda.</p>
             </div>
           </div>
         `,
         showCancelButton: true,
-        confirmButtonText: 'Simpan ke Database',
+        confirmButtonText: '<i class="fa-solid fa-cloud-arrow-up mr-2"></i>Upload File',
         cancelButtonText: 'Batal',
         confirmButtonColor: '#0f5132',
         cancelButtonColor: '#94a3b8',
-        customClass: {
-          popup: 'rounded-[1.5rem]',
-          confirmButton: 'rounded-xl font-bold px-5 py-2.5',
-          cancelButton: 'rounded-xl font-bold px-5 py-2.5'
-        },
+        customClass: { popup: 'rounded-[1.5rem]', confirmButton: 'rounded-xl font-bold px-5 py-2.5', cancelButton: 'rounded-xl font-bold px-5 py-2.5' },
         preConfirm: () => {
-          // Validasi form kosong
           const judul = document.getElementById('swal-judul').value.trim();
-          const id_media = document.getElementById('swal-id_media').value.trim();
+          const fileInput = document.getElementById('swal-file');
           
-          if (!judul || !id_media) {
-            Swal.showValidationMessage('Judul dan ID Google Drive wajib diisi!');
+          if (!judul || fileInput.files.length === 0) {
+            Swal.showValidationMessage('File dan Judul wajib diisi!');
             return false;
           }
           
-          return {
-            kategori: activeCategory,
-            judul: judul,
-            deskripsi: document.getElementById('swal-deskripsi').value.trim(),
-            pemateri: isVideo ? document.getElementById('swal-pemateri').value.trim() : '',
-            tanggal: document.getElementById('swal-tanggal').value.trim(),
-            lokasi: document.getElementById('swal-lokasi').value.trim(),
-            id_media: id_media
-          }
+          const file = fileInput.files[0];
+          
+          // Mengubah file fisik menjadi kode base64 agar bisa dikirim ke Google
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const base64Str = e.target.result.split(',')[1];
+              resolve({
+                kategori: activeCategory, judul: judul,
+                deskripsi: document.getElementById('swal-deskripsi').value.trim(),
+                pemateri: isVideo ? document.getElementById('swal-pemateri').value.trim() : '',
+                tanggal: document.getElementById('swal-tanggal').value.trim(),
+                lokasi: document.getElementById('swal-lokasi').value.trim(),
+                fileBase64: base64Str, fileName: file.name, mimeType: file.type
+              });
+            };
+            reader.readAsDataURL(file);
+          });
         }
       }).then((result) => {
-        if (result.isConfirmed) {
-          saveDataToGoogle(result.value);
-        }
+        if (result.isConfirmed) uploadDataToGoogle(result.value);
       });
     }
 
-    function saveDataToGoogle(data) {
-      // Tampilkan animasi loading memutar
-      Swal.fire({
-        title: 'Menyimpan Data...',
-        text: 'Data sedang dikirim ke Google Spreadsheet',
-        allowOutsideClick: false,
-        didOpen: () => { Swal.showLoading(); }
-      });
+    function uploadDataToGoogle(data) {
+      Swal.fire({ title: 'Sedang Mengunggah...', text: 'Mengirim file ke Google Drive, harap tunggu sebentar.', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
 
-      // Siapkan data untuk dikirim (POST)
-      const formData = new URLSearchParams();
-      formData.append('kategori', data.kategori);
-      formData.append('judul', data.judul);
-      formData.append('deskripsi', data.deskripsi);
-      formData.append('pemateri', data.pemateri);
-      formData.append('tanggal', data.tanggal);
-      formData.append('lokasi', data.lokasi);
-      formData.append('id_media', data.id_media);
-
-      // Kirim data ke Google Apps Script
       fetch(API_URL, {
         method: 'POST',
-        body: formData
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data)
       })
       .then(response => response.json())
       .then(res => {
         if (res.status === 'success') {
-          // Hapus memori hp (cache) agar aplikasi memuat data baru
-          localStorage.removeItem(CACHE_KEY);
-          Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: 'Materi baru telah ditambahkan ke database.',
-            confirmButtonColor: '#0f5132',
-            customClass: { popup: 'rounded-2xl' }
-          }).then(() => {
-            // Muat ulang aplikasi secara otomatis
-            window.location.reload();
-          });
-        } else {
-          throw new Error(res.message);
-        }
+          localStorage.removeItem(CACHE_KEY); // Hapus cache agar data baru muncul
+          Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'File tersimpan di Google Drive & Aplikasi.', confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-2xl' } })
+          .then(() => window.location.reload());
+        } else throw new Error(res.message);
       })
       .catch(error => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Gagal Menyimpan',
-          text: error.message || 'Terjadi kesalahan sistem',
-          confirmButtonColor: '#0f5132',
-          customClass: { popup: 'rounded-2xl' }
-        });
+        Swal.fire({ icon: 'error', title: 'Upload Gagal', text: error.message || 'Video terlalu besar / Koneksi lambat.', confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-2xl' } });
       });
     }
   </script>
