@@ -21,10 +21,13 @@
     .app-container { position: relative; width: 100%; max-width: 28rem; height: 100%; display: flex; flex-direction: column; background-color: #f8fafc; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
     .header-area { flex-shrink: 0; z-index: 50; background-color: #f8fafc; }
     
-    /* overscroll-behavior-y: none Mencegah konflik dengan sistem pull-to-refresh bawaan browser */
-    .content-area { flex-grow: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: none; padding: 0 1rem 3rem 1rem; }
+    .content-area { flex-grow: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding: 0 1rem 3rem 1rem; position: relative; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     
+    /* Indikator Refresh Halus berbasis GPU Acceleration */
+    #ptr-container { position: absolute; top: 0; left: 0; right: 0; height: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; z-index: 40; pointer-events: none; }
+    #ptr-icon-box { transform: translateY(-40px) scale(0.8); opacity: 0; transition: transform 0.15s ease, opacity 0.15s ease; will-change: transform, opacity; }
+
     .swal2-popup { border-radius: 1.5rem !important; font-family: "Plus Jakarta Sans", sans-serif; padding: 1.5rem !important; }
     .swal2-title { font-size: 1.25rem !important; color: #1e293b !important; padding-top: 0 !important; }
     .custom-input { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.75rem 1rem; font-size: 0.875rem; outline: none; transition: all 0.2s; }
@@ -46,8 +49,8 @@
         <p class="text-[10px] text-slate-500 font-bold mt-1.5 tracking-widest uppercase">Mempersiapkan...</p>
         <div class="mt-8 flex gap-2">
           <div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-bounce" style="animation-delay: 0s"></div>
-          <div class="w-2.5 h-2.5 rounded-full bg-[#0f5132] animate-bounce" style="animation-delay: 0.6s"></div>
-          <div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-bounce" style="animation-delay: 1.2s"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-[#0f5132] animate-bounce" style="animation-delay: 0.7s"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-bounce" style="animation-delay: 1.4s"></div>
         </div>
       </div>
 
@@ -64,7 +67,7 @@
                 <h1 class="text-[13px] font-bold text-slate-900 leading-tight tracking-wide">
                   Materi <span class="font-extrabold text-[#0f5132]">Manasik Haji</span>
                 </h1>
-                <p class="text-[10px] text-slate-500 font-semibold tracking-tight mt-0.5">Tahun 1448 H / 2027 M</p>
+                <p class="text-[10px] text-slate-500 font-semibold tracking-tight mt-0.5">1448 H / 2027 M</p>
               </div>
             </div>
             
@@ -97,14 +100,14 @@
       <!-- AREA KONTEN -->
       <main id="main-content" class="content-area">
         
-        <!-- PULL TO REFRESH INDICATOR -->
-        <div id="ptr-indicator" class="flex justify-center items-end h-0 overflow-hidden w-full">
-          <div class="bg-white shadow-md rounded-full w-9 h-9 flex items-center justify-center border border-slate-200 mb-4 pointer-events-none">
-            <i class="fa-solid fa-rotate-right text-[#0f5132] text-lg transition-transform duration-100" id="ptr-icon"></i>
+        <!-- INDIKATOR REFRESH HALUS (GPU ACCELERATED) -->
+        <div id="ptr-container">
+          <div id="ptr-icon-box" class="bg-white shadow-lg rounded-full w-10 h-10 flex items-center justify-center border border-slate-200">
+            <i class="fa-solid fa-rotate-right text-[#0f5132] text-base" id="ptr-icon"></i>
           </div>
         </div>
         
-        <div class="space-y-5 pt-2">
+        <div class="space-y-5 pt-3">
           <div id="videoContainer" class="flex flex-col gap-5 hidden"></div>
         </div>
       </main>
@@ -116,7 +119,6 @@
     let activeCategory = 'Video'; 
     const CACHE_KEY = 'kbihu_materi_data';
 
-    // PASTIKAN API URL ANDA BENAR DI SINI
     const API_URL = "https://script.google.com/macros/s/AKfycbwdILFBt9-j3tdGr7eL7EOoQNaqMdmbDwzCB8EAKfQBJArgpHmsqg4I-5KUmsBTtqPKCQ/exec";
 
     window.onload = function() {
@@ -384,58 +386,71 @@
     }
 
     // ==========================================
-    // LOGIKA PULL TO REFRESH (KHUSUS HP)
+    // LOGIKA PULL TO REFRESH HALUS (GPU ACCELERATED)
     // ==========================================
     const mainContent = document.getElementById('main-content');
-    const ptrIndicator = document.getElementById('ptr-indicator');
+    const ptrContainer = document.getElementById('ptr-container');
+    const ptrIconBox = document.getElementById('ptr-icon-box');
     const ptrIcon = document.getElementById('ptr-icon');
+    
     let startY = 0;
-    let isPulling = false;
+    let pulling = false;
+    let refreshTriggered = false;
 
     mainContent.addEventListener('touchstart', (e) => {
-      // Hanya aktif jika pengguna berada di paling atas layar
-      if (mainContent.scrollTop <= 1) {
+      if (mainContent.scrollTop <= 0 && !refreshTriggered) {
         startY = e.touches[0].clientY;
-        isPulling = true;
-        ptrIndicator.style.transition = 'none'; 
+        pulling = true;
+        ptrContainer.style.height = '0px';
+        ptrIconBox.style.transition = 'none';
       }
     }, {passive: true});
 
     mainContent.addEventListener('touchmove', (e) => {
-      if (!isPulling) return;
+      if (!pulling) return;
       const currentY = e.touches[0].clientY;
-      const pullDistance = currentY - startY;
+      const diff = currentY - startY;
 
-      if (pullDistance > 0 && mainContent.scrollTop <= 1) {
-        // Semakin ditarik, icon meluncur turun dan berputar
-        const height = Math.min(pullDistance * 0.4, 80); 
-        ptrIndicator.style.height = height + 'px';
-        ptrIcon.style.transform = `rotate(${pullDistance * 3}deg)`;
+      if (diff > 0 && mainContent.scrollTop <= 0) {
+        // Menggunakan kurva resistensi agar tarikan terasa empuk dan tidak melompat-lompat
+        const pullDistance = Math.min(diff * 0.45, 90); 
+        ptrContainer.style.height = pullDistance + 'px';
+        
+        const progress = pullDistance / 80;
+        ptrIconBox.style.opacity = Math.min(progress, 1);
+        ptrIconBox.style.transform = `translateY(${pullDistance * 0.3}px) scale(${Math.min(progress, 1)})`;
+        ptrIcon.style.transform = `rotate(${diff * 2.5}deg)`;
       } else {
-        isPulling = false; // Batal jika pengguna malah scroll ke bawah
+        pulling = false;
+        ptrContainer.style.height = '0px';
       }
     }, {passive: true});
 
     mainContent.addEventListener('touchend', (e) => {
-      if (!isPulling) return;
-      isPulling = false;
-      ptrIndicator.style.transition = 'height 0.3s ease-out';
+      if (!pulling) return;
+      pulling = false;
       
-      const currentHeight = parseInt(ptrIndicator.style.height || '0');
-      
-      // Jika ditarik cukup jauh (melewati batas 60px), lakukan Refresh!
-      if (currentHeight >= 60) {
-        ptrIndicator.style.height = '70px';
+      const currentHeight = parseInt(ptrContainer.style.height || '0');
+      ptrContainer.style.transition = 'height 0.25s cubic-bezier(0.1, 0.9, 0.2, 1)';
+      ptrIconBox.style.transition = 'transform 0.25s ease, opacity 0.25s ease';
+
+      if (currentHeight >= 55) {
+        // Jika ditarik cukup dalam, kunci di posisi pas dan jalankan animasi putar
+        refreshTriggered = true;
+        ptrContainer.style.height = '70px';
+        ptrIconBox.style.transform = 'translateY(10px) scale(1)';
+        ptrIconBox.style.opacity = '1';
         ptrIcon.classList.add('animate-spin');
         
         setTimeout(() => {
-          // Hapus cache agar data benar-benar mengambil yang baru dari Google
           localStorage.removeItem(CACHE_KEY);
           window.location.reload();
         }, 600);
       } else {
-        // Jika tarikan kurang kuat, kembalikan ke atas (batal refresh)
-        ptrIndicator.style.height = '0px';
+        // Jika tarikan kurang, kembalikan dengan mulus ke atas
+        ptrContainer.style.height = '0px';
+        ptrIconBox.style.opacity = '0';
+        ptrIconBox.style.transform = 'translateY(-40px) scale(0.8)';
       }
     });
   </script>
