@@ -274,33 +274,46 @@
     function checkAdminPIN() {
       Swal.fire({
         title: '<span class="font-extrabold text-slate-800 tracking-tight">Akses Admin</span>',
-        html: '<p class="text-sm text-slate-500 mb-2">Masukkan PIN rahasia untuk menambah materi.</p>',
-        input: 'password',
-        inputAttributes: {
-          autocapitalize: 'off',
-          autocorrect: 'off',
-          placeholder: 'Masukkan PIN'
-        },
+        html: `
+          <div class="mt-2 font-sans">
+            <p class="text-sm text-slate-500 mb-4">Masukkan kode rahasia untuk menambah materi.</p>
+            <div class="relative max-w-[16rem] mx-auto">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i class="fa-solid fa-lock text-slate-400 text-sm"></i>
+              </div>
+              <!-- Kotak Input PIN Kustom -->
+              <input type="password" id="swal-pin" class="custom-input pl-12 text-center tracking-[0.4em] font-extrabold text-lg" placeholder="••••••" autocomplete="off">
+            </div>
+          </div>
+        `,
         showCancelButton: true,
-        confirmButtonText: '<i class="fa-solid fa-unlock-keyhole mr-1"></i> Masuk',
+        confirmButtonText: '<i class="fa-solid fa-unlock-keyhole mr-2"></i> Masuk',
         cancelButtonText: 'Batal',
+        buttonsStyling: false,
         customClass: {
           popup: 'rounded-[1.5rem]',
-          input: 'custom-input text-center text-lg font-bold tracking-widest',
-          confirmButton: 'bg-gradient-to-r from-amber-500 to-[#0f5132] text-white rounded-xl font-bold px-5 py-2.5 shadow-md hover:shadow-lg mr-3 focus:outline-none w-full sm:w-auto mb-2 sm:mb-0', 
-          cancelButton: 'bg-slate-200 text-slate-700 hover:bg-slate-300 rounded-xl font-bold px-5 py-2.5 transition-colors focus:outline-none w-full sm:w-auto'
+          confirmButton: 'bg-gradient-to-r from-amber-500 to-[#0f5132] text-white rounded-xl font-bold px-6 py-2.5 shadow-md hover:shadow-lg mr-3 focus:outline-none', 
+          cancelButton: 'bg-slate-200 text-slate-700 hover:bg-slate-300 rounded-xl font-bold px-6 py-2.5 transition-colors focus:outline-none'
+        },
+        preConfirm: () => {
+          const pin = document.getElementById('swal-pin').value;
+          if (!pin) {
+            Swal.showValidationMessage('Kode rahasia tidak boleh kosong!');
+            return false;
+          }
+          return pin;
         }
       }).then((result) => {
         if (result.isConfirmed) {
-          // --- GANTI ANGKA 123456 DI BAWAH INI DENGAN PIN RAHASIA ANDA ---
-          if (result.value === 'KBIHU26') {
+          // --- GANTI TEKS DI BAWAH INI DENGAN KODE RAHASIA ANDA ---
+          if (result.value === 'Kbihu26') {
             showAddModal(); // Jika PIN Benar, Buka form upload
           } else {
             // Jika PIN Salah
             Swal.fire({
               icon: 'error',
               title: 'Akses Ditolak',
-              text: 'PIN yang Anda masukkan salah!',
+              text: 'Kode rahasia yang Anda masukkan salah!',
               confirmButtonColor: '#0f5132',
               customClass: { popup: 'rounded-[1.5rem]' }
             });
@@ -308,7 +321,6 @@
         }
       });
     }
-
 
     function showAddModal() {
       const isVideo = activeCategory === 'Video';
