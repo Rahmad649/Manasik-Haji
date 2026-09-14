@@ -22,7 +22,7 @@
     .app-container { position: relative; width: 100%; max-width: 28rem; height: 100%; display: flex; flex-direction: column; background-color: #f8fafc; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
     .header-area { flex-shrink: 0; z-index: 50; background-color: #f8fafc; }
     
-    .content-area { flex-grow: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding: 0 1rem 3rem 1rem; position: relative; }
+    .content-area { flex-grow: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding: 0 0.75rem 3rem 0.75rem; position: relative; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     
     #ptr-container { position: absolute; top: 0; left: 0; right: 0; height: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; z-index: 40; pointer-events: none; }
@@ -78,29 +78,29 @@
           </div>
         </header>
 
-        <!-- SEKSI BACAAN TALBIYAH (DIRAPATKAN) -->
-        <section class="px-4 mt-2.5">
-          <div class="relative bg-[#f0fdf4] px-3 py-2.5 rounded-[1.25rem] border border-emerald-100 shadow-sm overflow-hidden">
-            <i class="fa-solid fa-kaaba absolute -bottom-4 -right-2 text-6xl text-emerald-100/60 -rotate-12 pointer-events-none"></i>
-            
-            <div class="relative z-10 text-center flex flex-col justify-center">
-              <!-- Judul Talbiyah -->
-              <div class="flex items-center justify-center gap-1.5 mb-1 opacity-90">
-                <i class="fa-solid fa-book-open-reader text-[#0f5132] text-[10px]"></i>
-                <h3 class="text-[11px] font-bold italic text-[#0f5132] tracking-wide">Bacaan Talbiyah</h3>
-              </div>
+        <!-- SEKSI BACAAN TALBIYAH (LEBIH PADAT & MENYATU DENGAN BACKGROUND) -->
+        <section class="px-4 mt-2.5 relative overflow-hidden pb-1">
+          <!-- Watermark Ka'bah Transparan -->
+          <i class="fa-solid fa-kaaba absolute -bottom-5 -right-2 text-[75px] text-slate-200/80 -rotate-12 pointer-events-none z-0"></i>
+          
+          <div class="relative z-10 flex flex-col justify-center">
+            <!-- Judul & Ikon Kiri Atas (Warna Hitam) -->
+            <div class="flex items-center justify-start gap-1.5 mb-0.5 opacity-90">
+              <i class="fa-solid fa-book-open-reader text-slate-800 text-[10.5px]"></i>
+              <h3 class="text-[11px] font-bold italic text-slate-800 tracking-wide">Bacaan Talbiyah</h3>
+            </div>
 
-              <!-- Teks Arab -->
-              <p class="font-arab text-[19px] leading-[1.5] font-bold text-[#0f5132]" dir="rtl">
+            <div class="text-center space-y-0.5 mt-1">
+              <!-- Teks Arab (Warna Hijau) -->
+              <p class="font-arab text-[18px] sm:text-[19px] leading-[1.6] font-bold text-[#0f5132]" dir="rtl">
                 لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ لَا شَرِيكَ لَكَ
               </p>
               <!-- Teks Latin -->
-              <p class="text-[10.5px] text-slate-700 font-bold leading-tight px-1 mt-1">
+              <p class="text-[10px] text-slate-700 font-bold leading-tight px-1 pt-0.5">
                 Labbaikallahumma labbaik, labbaika laa syariika laka labbaik. Innal hamda wan-ni'mata laka wal mulk, laa syariika lak.
               </p>
-              <div class="w-8 h-px bg-emerald-200 mx-auto my-1.5"></div>
               <!-- Teks Arti -->
-              <p class="text-[9.5px] text-slate-500 font-medium italic leading-tight px-1">
+              <p class="text-[9px] text-slate-500 font-medium italic leading-tight px-1">
                 "Aku penuhi panggilan-Mu ya Allah, aku penuhi panggilan-Mu. Aku penuhi panggilan-Mu, tiada sekutu bagi-Mu. Sesungguhnya segala puji, nikmat, dan kerajaan adalah milik-Mu, tiada sekutu bagi-Mu."
               </p>
             </div>
@@ -108,27 +108,31 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- TABS MODEL FOLDER -->
+        <!-- TABS MODEL FOLDER (KECIL & RATA KIRI) -->
         <!-- ========================================== -->
-        <section class="px-4 mt-5">
-          <div class="flex items-end gap-1.5 max-w-sm mx-auto px-1">
-            <button onclick="setCategory('Video')" id="tab-Video" class="flex-1 py-1.5 px-3 rounded-t-xl bg-[#0f5132] text-white font-bold text-[13px] flex items-center justify-center space-x-1.5 transition-all relative z-10">
-              <i class="fa-solid fa-play-circle text-[13px]"></i><span>Video Materi</span>
+        <section class="px-4 mt-3">
+          <div class="flex items-end gap-1 px-1">
+            <button onclick="setCategory('Video')" id="tab-Video" class="py-1.5 px-3 rounded-t-xl bg-[#0f5132] text-white font-bold text-[11.5px] flex items-center justify-center space-x-1.5 transition-all relative z-10 shadow-sm">
+              <i class="fa-solid fa-play-circle text-[11.5px]"></i><span>Video Materi</span>
             </button>
-            <button onclick="setCategory('Foto')" id="tab-Foto" class="flex-1 py-1.5 px-3 rounded-t-xl bg-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-300 font-semibold text-[13px] flex items-center justify-center space-x-1.5 transition-all relative z-0">
-              <i class="fa-regular fa-image text-[13px]"></i><span>Galeri Foto</span>
+            <button onclick="setCategory('Foto')" id="tab-Foto" class="py-1.5 px-3 rounded-t-xl bg-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-300 font-semibold text-[11.5px] flex items-center justify-center space-x-1.5 transition-all relative z-0">
+              <i class="fa-regular fa-image text-[11.5px]"></i><span>Galeri Foto</span>
             </button>
           </div>
         </section>
 
-        <!-- KATALOG HEADER -->
-        <div class="bg-slate-50 border-t-[3px] border-[#0f5132] pt-2.5 pb-2 px-4 shadow-sm relative z-20">
+        <!-- KATALOG HEADER (Simpel tanpa Badge) -->
+        <div class="bg-slate-50 border-t-[2.5px] border-[#0f5132] pt-2 pb-1.5 px-4 shadow-sm relative z-20">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-2">
-              <div class="w-1 h-4 bg-amber-500 rounded-full"></div>
-              <h2 id="katalog-title" class="text-[14px] font-extrabold text-slate-900 tracking-tight">Katalog Materi</h2>
+              <div class="w-1 h-3.5 bg-amber-500 rounded-full"></div>
+              <h2 id="katalog-title" class="text-[13px] font-extrabold text-slate-900 tracking-tight">Katalog Materi</h2>
             </div>
-            <span id="videoCount" class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-[#0f5132] border border-emerald-200 shadow-sm">Memuat...</span>
+            <!-- BULLET & TEKS JUMLAH (Warna Hijau) -->
+            <div class="flex items-center space-x-1 text-[#0f5132]">
+              <span class="text-[14px] leading-none mb-0.5">&bull;</span>
+              <span id="videoCount" class="text-[10px] font-bold">Memuat...</span>
+            </div>
           </div>
         </div>
       </div>
@@ -141,7 +145,7 @@
           </div>
         </div>
         
-        <div class="space-y-4 pt-3">
+        <div class="space-y-4 pt-2">
           <div id="videoContainer" class="flex flex-col gap-4 hidden"></div>
         </div>
       </main>
@@ -284,8 +288,8 @@
       const tV = document.getElementById('tab-Video'), tF = document.getElementById('tab-Foto');
       const title = document.getElementById('katalog-title');
       
-      const activeClass = "flex-1 py-1.5 px-3 rounded-t-xl bg-[#0f5132] text-white font-bold text-[13px] flex items-center justify-center space-x-1.5 transition-all relative z-10";
-      const inactiveClass = "flex-1 py-1.5 px-3 rounded-t-xl bg-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-300 font-semibold text-[13px] flex items-center justify-center space-x-1.5 transition-all relative z-0";
+      const activeClass = "py-1.5 px-3 rounded-t-xl bg-[#0f5132] text-white font-bold text-[11.5px] flex items-center justify-center space-x-1.5 transition-all relative z-10 shadow-sm";
+      const inactiveClass = "py-1.5 px-3 rounded-t-xl bg-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-300 font-semibold text-[11.5px] flex items-center justify-center space-x-1.5 transition-all relative z-0";
       
       if (categoryName === 'Video') {
         title.innerText = 'Katalog Materi';
@@ -335,7 +339,7 @@
         }
       }).then((result) => {
         if (result.isConfirmed) {
-          if (result.value === 'Admin2027') {
+          if (result.value === 'Kbihu26') {
             showAddModal(); 
           } else {
             Swal.fire({
