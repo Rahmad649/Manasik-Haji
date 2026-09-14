@@ -11,9 +11,10 @@
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
   
   <script>
-    tailwind.config = { theme: { extend: { colors: { brand: { emerald: '#0f5132', forest: '#14532d', moss: '#1b6e44' } }, fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] } } } }
+    tailwind.config = { theme: { extend: { colors: { brand: { emerald: '#0f5132', forest: '#14532d', moss: '#1b6e44' } }, fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], arab: ['"Amiri"', 'serif'] } } } }
   </script>
   <style>
     html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #e2e8f0; }
@@ -45,11 +46,14 @@
         <div class="w-64 h-auto mb-4 animate-pulse">
           <img src="https://drive.google.com/thumbnail?id=17KxZoH3JrRh49B7AiQY3EfsfAHShYElT" alt="Logo KBIHU" class="w-full h-auto object-contain drop-shadow-xl">
         </div>
+        <h2 class="text-xl font-bold text-slate-900 tracking-wide text-center mt-3">
+          Materi <span class="font-extrabold text-[#0f5132]">Manasik Haji</span>
+        </h2>
         <p class="text-[10px] text-slate-500 font-bold mt-1.5 tracking-widest uppercase">Mempersiapkan Halaman...</p>
         <div class="mt-8 flex gap-2">
           <div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-bounce" style="animation-delay: 0s"></div>
-          <div class="w-2.5 h-2.5 rounded-full bg-[#0f5132] animate-bounce" style="animation-delay: 0.7s"></div>
-          <div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-bounce" style="animation-delay: 1.4s"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-[#0f5132] animate-bounce" style="animation-delay: 1.2s"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-bounce" style="animation-delay: 2.4s"></div>
         </div>
       </div>
 
@@ -61,39 +65,63 @@
               <div class="flex-shrink-0 w-28 sm:w-32 h-auto flex items-center justify-center">
                 <img src="https://drive.google.com/thumbnail?id=17KxZoH3JrRh49B7AiQY3EfsfAHShYElT" alt="Logo KBIHU" class="w-full h-auto object-contain">
               </div>
-              <div class="h-8 w-px bg-slate-300 mx-1"></div>
-              <div class="flex flex-col justify-center">
-                <h1 class="text-[13px] font-bold text-slate-900 leading-tight tracking-wide">
-                  Materi <span class="font-extrabold text-[#0f5132]">Manasik Haji</span>
+              <div class="h-9 w-px bg-slate-300 mx-1.5"></div>
+              
+              <!-- PERUBAHAN FONT HEADER SESUAI GAMBAR REFERENSI -->
+              <div class="flex flex-col justify-center pt-0.5">
+                <h1 class="text-[16px] sm:text-[17px] font-extrabold text-slate-800 leading-tight tracking-tight">
+                  Materi <span class="text-[#0f5132]">Manasik Haji</span>
                 </h1>
-                <p class="text-[10px] text-slate-500 font-semibold tracking-tight mt-0.5">Tahun 1448 H / 2027 M</p>
+                <p class="text-[11.5px] text-slate-500 font-semibold tracking-tight mt-0.5">Tahun 1448 H / 2027 M</p>
               </div>
             </div>
             
-            <!-- PERUBAHAN: Tombol Tambah sekarang memanggil checkAdminPIN() -->
             <button onclick="checkAdminPIN()" class="w-9 h-9 bg-gradient-to-br from-amber-500 to-[#0f5132] text-white rounded-full flex items-center justify-center shrink-0 hover:scale-105 shadow-md transition-all focus:outline-none">
               <i class="fa-solid fa-plus text-sm"></i>
             </button>
           </div>
         </header>
 
-        <section class="px-4 mt-3">
-          <div class="p-1 bg-slate-200/80 rounded-xl flex items-center text-xs font-semibold shadow-inner max-w-sm mx-auto">
-            <button onclick="setCategory('Video')" id="tab-Video" class="flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 transition-all font-bold">
+        <!-- SEKSI BACAAN TALBIYAH -->
+        <section class="px-4 mt-3.5">
+          <div class="relative bg-gradient-to-br from-emerald-50 to-white p-4 rounded-[1.25rem] border border-emerald-100 shadow-sm overflow-hidden">
+            <i class="fa-solid fa-kaaba absolute -bottom-3 -right-2 text-6xl text-emerald-100/40 -rotate-12 pointer-events-none"></i>
+            <div class="relative z-10 text-center space-y-2.5">
+              <p class="font-arab text-[20px] leading-[1.8] font-bold text-[#0f5132]" dir="rtl">
+                لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ لَا شَرِيكَ لَكَ
+              </p>
+              <p class="text-[12px] text-slate-700 font-bold leading-relaxed px-1">
+                Labbaikallahumma labbaik, labbaika laa syariika laka labbaik. Innal hamda wan-ni'mata laka wal mulk, laa syariika lak.
+              </p>
+              <div class="w-12 h-px bg-emerald-200 mx-auto"></div>
+              <p class="text-[11px] text-slate-500 font-medium italic leading-relaxed px-1">
+                "Aku penuhi panggilan-Mu ya Allah, aku penuhi panggilan-Mu. Aku penuhi panggilan-Mu, tiada sekutu bagi-Mu. Sesungguhnya segala puji, nikmat, dan kerajaan adalah milik-Mu, tiada sekutu bagi-Mu."
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- TABS MODEL FOLDER -->
+        <section class="px-4 mt-6">
+          <div class="flex items-end gap-1 max-w-sm mx-auto px-1">
+            <button onclick="setCategory('Video')" id="tab-Video" class="flex-1 py-2.5 px-3 rounded-t-2xl bg-[#0f5132] text-white font-bold flex items-center justify-center space-x-1.5 transition-all relative z-10">
               <i class="fa-solid fa-play-circle text-sm"></i><span>Video Materi</span>
             </button>
-            <button onclick="setCategory('Foto')" id="tab-Foto" class="flex-1 py-2 px-3 rounded-lg text-slate-500 hover:text-slate-800 flex items-center justify-center space-x-1.5 transition-all bg-transparent shadow-none font-semibold">
+            <button onclick="setCategory('Foto')" id="tab-Foto" class="flex-1 py-2 px-3 rounded-t-2xl bg-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-300 font-semibold flex items-center justify-center space-x-1.5 transition-all shadow-inner relative z-0">
               <i class="fa-regular fa-image text-sm"></i><span>Galeri Foto</span>
             </button>
           </div>
         </section>
 
-        <div class="flex items-center justify-between px-4 mt-3 pb-2 pt-1 bg-slate-50">
-          <div class="flex items-center space-x-2">
-            <div class="w-1 h-5 bg-[#0f5132] rounded-full"></div>
-            <h2 id="katalog-title" class="text-base font-extrabold text-slate-900 tracking-tight">Katalog Materi</h2>
+        <!-- KATALOG HEADER -->
+        <div class="bg-slate-50 border-t-[3.5px] border-[#0f5132] pt-3 pb-2 px-4 shadow-sm relative z-20">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <div class="w-1 h-5 bg-amber-500 rounded-full"></div>
+              <h2 id="katalog-title" class="text-base font-extrabold text-slate-900 tracking-tight">Katalog Materi</h2>
+            </div>
+            <span id="videoCount" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-[#0f5132] border border-emerald-200 shadow-sm">Memuat...</span>
           </div>
-          <span id="videoCount" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-[#0f5132] border border-emerald-200 shadow-sm">Memuat...</span>
         </div>
       </div>
 
@@ -249,14 +277,17 @@
       const tV = document.getElementById('tab-Video'), tF = document.getElementById('tab-Foto');
       const title = document.getElementById('katalog-title');
       
+      const activeClass = "flex-1 py-2.5 px-3 rounded-t-2xl bg-[#0f5132] text-white font-bold flex items-center justify-center space-x-1.5 transition-all relative z-10";
+      const inactiveClass = "flex-1 py-2 px-3 rounded-t-2xl bg-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-300 font-semibold flex items-center justify-center space-x-1.5 transition-all shadow-inner relative z-0";
+      
       if (categoryName === 'Video') {
         title.innerText = 'Katalog Materi';
-        tV.className = 'flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 font-bold';
-        tF.className = 'flex-1 py-2 px-3 rounded-lg text-slate-500 flex items-center justify-center space-x-1.5 font-semibold bg-transparent';
+        tV.className = activeClass;
+        tF.className = inactiveClass;
       } else {
         title.innerText = 'Katalog Foto';
-        tF.className = 'flex-1 py-2 px-3 rounded-lg bg-white text-[#0f5132] shadow-sm flex items-center justify-center space-x-1.5 font-bold';
-        tV.className = 'flex-1 py-2 px-3 rounded-lg text-slate-500 flex items-center justify-center space-x-1.5 font-semibold bg-transparent';
+        tF.className = activeClass;
+        tV.className = inactiveClass;
       }
       renderCards(allVideos); 
     }
@@ -267,10 +298,6 @@
       Swal.fire({ icon: 'error', title: 'Terjadi Kesalahan', text: 'Periksa koneksi Anda.', confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-2xl' } });
     }
 
-
-    // =========================================================
-    // FITUR BARU: VERIFIKASI PIN ADMIN
-    // =========================================================
     function checkAdminPIN() {
       Swal.fire({
         title: '<span class="font-extrabold text-slate-800 tracking-tight">Akses Admin</span>',
@@ -281,7 +308,6 @@
               <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <i class="fa-solid fa-lock text-slate-400 text-sm"></i>
               </div>
-              <!-- Kotak Input PIN Kustom -->
               <input type="password" id="swal-pin" class="custom-input pl-12 text-center tracking-[0.4em] font-extrabold text-lg" placeholder="••••••" autocomplete="off">
             </div>
           </div>
@@ -305,17 +331,12 @@
         }
       }).then((result) => {
         if (result.isConfirmed) {
-          // --- GANTI TEKS DI BAWAH INI DENGAN KODE RAHASIA ANDA ---
-          if (result.value === 'Kbihu26') {
-            showAddModal(); // Jika PIN Benar, Buka form upload
+          if (result.value === 'Admin2027') {
+            showAddModal(); 
           } else {
-            // Jika PIN Salah
             Swal.fire({
-              icon: 'error',
-              title: 'Akses Ditolak',
-              text: 'Kode rahasia yang Anda masukkan salah!',
-              confirmButtonColor: '#0f5132',
-              customClass: { popup: 'rounded-[1.5rem]' }
+              icon: 'error', title: 'Akses Ditolak', text: 'Kode rahasia yang Anda masukkan salah!',
+              confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-[1.5rem]' }
             });
           }
         }
@@ -390,7 +411,6 @@
                 </div>
               </div>
             </div>
-
           </div>
         `,
         showCancelButton: true,
@@ -481,22 +501,13 @@
       params.append('fileName', data.fileName);
       params.append('mimeType', data.mimeType);
 
-      fetch(API_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: params
-      })
+      fetch(API_URL, { method: 'POST', mode: 'no-cors', body: params })
       .then(() => {
         localStorage.removeItem(CACHE_KEY); 
         Swal.fire({ 
-          icon: 'success', 
-          title: 'Berhasil!', 
-          text: 'File telah dikirim ke server.', 
-          confirmButtonColor: '#0f5132', 
-          customClass: { popup: 'rounded-[1.5rem]' } 
-        }).then(() => {
-          setTimeout(() => { window.location.reload(); }, 1000);
-        });
+          icon: 'success', title: 'Berhasil!', text: 'File telah dikirim ke server.', 
+          confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-[1.5rem]' } 
+        }).then(() => { setTimeout(() => { window.location.reload(); }, 1000); });
       })
       .catch(error => {
         Swal.fire({ icon: 'error', title: 'Upload Gagal', text: 'Terjadi masalah jaringan.', confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-[1.5rem]' } });
