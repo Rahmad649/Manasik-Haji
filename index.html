@@ -46,9 +46,6 @@
         <div class="w-64 h-auto mb-4 animate-pulse">
           <img src="https://drive.google.com/thumbnail?id=17KxZoH3JrRh49B7AiQY3EfsfAHShYElT" alt="Logo KBIHU" class="w-full h-auto object-contain drop-shadow-xl">
         </div>
-        <h2 class="text-xl font-bold text-slate-900 tracking-wide text-center mt-3">
-          Materi <span class="font-extrabold text-[#0f5132]">Manasik Haji</span>
-        </h2>
         <p class="text-[10px] text-slate-500 font-bold mt-1.5 tracking-widest uppercase">Mempersiapkan Halaman...</p>
         <div class="mt-8 flex gap-2">
           <div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-bounce" style="animation-delay: 0s"></div>
@@ -67,7 +64,6 @@
               </div>
               <div class="h-9 w-px bg-slate-300 mx-1.5"></div>
               
-              <!-- PERUBAHAN FONT HEADER SESUAI GAMBAR REFERENSI -->
               <div class="flex flex-col justify-center pt-0.5">
                 <h1 class="text-[16px] sm:text-[17px] font-extrabold text-slate-800 leading-tight tracking-tight">
                   Materi <span class="text-[#0f5132]">Manasik Haji</span>
@@ -82,45 +78,57 @@
           </div>
         </header>
 
-        <!-- SEKSI BACAAN TALBIYAH -->
-        <section class="px-4 mt-3.5">
-          <div class="relative bg-gradient-to-br from-emerald-50 to-white p-4 rounded-[1.25rem] border border-emerald-100 shadow-sm overflow-hidden">
-            <i class="fa-solid fa-kaaba absolute -bottom-3 -right-2 text-6xl text-emerald-100/40 -rotate-12 pointer-events-none"></i>
-            <div class="relative z-10 text-center space-y-2.5">
-              <p class="font-arab text-[20px] leading-[1.8] font-bold text-[#0f5132]" dir="rtl">
+        <!-- SEKSI BACAAN TALBIYAH (DIRAPATKAN) -->
+        <section class="px-4 mt-2.5">
+          <div class="relative bg-[#f0fdf4] px-3 py-2.5 rounded-[1.25rem] border border-emerald-100 shadow-sm overflow-hidden">
+            <i class="fa-solid fa-kaaba absolute -bottom-4 -right-2 text-6xl text-emerald-100/60 -rotate-12 pointer-events-none"></i>
+            
+            <div class="relative z-10 text-center flex flex-col justify-center">
+              <!-- Judul Talbiyah -->
+              <div class="flex items-center justify-center gap-1.5 mb-1 opacity-90">
+                <i class="fa-solid fa-book-open-reader text-[#0f5132] text-[10px]"></i>
+                <h3 class="text-[11px] font-bold italic text-[#0f5132] tracking-wide">Bacaan Talbiyah</h3>
+              </div>
+
+              <!-- Teks Arab -->
+              <p class="font-arab text-[19px] leading-[1.5] font-bold text-[#0f5132]" dir="rtl">
                 لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ لَا شَرِيكَ لَكَ
               </p>
-              <p class="text-[12px] text-slate-700 font-bold leading-relaxed px-1">
+              <!-- Teks Latin -->
+              <p class="text-[10.5px] text-slate-700 font-bold leading-tight px-1 mt-1">
                 Labbaikallahumma labbaik, labbaika laa syariika laka labbaik. Innal hamda wan-ni'mata laka wal mulk, laa syariika lak.
               </p>
-              <div class="w-12 h-px bg-emerald-200 mx-auto"></div>
-              <p class="text-[11px] text-slate-500 font-medium italic leading-relaxed px-1">
+              <div class="w-8 h-px bg-emerald-200 mx-auto my-1.5"></div>
+              <!-- Teks Arti -->
+              <p class="text-[9.5px] text-slate-500 font-medium italic leading-tight px-1">
                 "Aku penuhi panggilan-Mu ya Allah, aku penuhi panggilan-Mu. Aku penuhi panggilan-Mu, tiada sekutu bagi-Mu. Sesungguhnya segala puji, nikmat, dan kerajaan adalah milik-Mu, tiada sekutu bagi-Mu."
               </p>
             </div>
           </div>
         </section>
 
+        <!-- ========================================== -->
         <!-- TABS MODEL FOLDER -->
-        <section class="px-4 mt-6">
-          <div class="flex items-end gap-1 max-w-sm mx-auto px-1">
-            <button onclick="setCategory('Video')" id="tab-Video" class="flex-1 py-2.5 px-3 rounded-t-2xl bg-[#0f5132] text-white font-bold flex items-center justify-center space-x-1.5 transition-all relative z-10">
-              <i class="fa-solid fa-play-circle text-sm"></i><span>Video Materi</span>
+        <!-- ========================================== -->
+        <section class="px-4 mt-5">
+          <div class="flex items-end gap-1.5 max-w-sm mx-auto px-1">
+            <button onclick="setCategory('Video')" id="tab-Video" class="flex-1 py-1.5 px-3 rounded-t-xl bg-[#0f5132] text-white font-bold text-[13px] flex items-center justify-center space-x-1.5 transition-all relative z-10">
+              <i class="fa-solid fa-play-circle text-[13px]"></i><span>Video Materi</span>
             </button>
-            <button onclick="setCategory('Foto')" id="tab-Foto" class="flex-1 py-2 px-3 rounded-t-2xl bg-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-300 font-semibold flex items-center justify-center space-x-1.5 transition-all shadow-inner relative z-0">
-              <i class="fa-regular fa-image text-sm"></i><span>Galeri Foto</span>
+            <button onclick="setCategory('Foto')" id="tab-Foto" class="flex-1 py-1.5 px-3 rounded-t-xl bg-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-300 font-semibold text-[13px] flex items-center justify-center space-x-1.5 transition-all relative z-0">
+              <i class="fa-regular fa-image text-[13px]"></i><span>Galeri Foto</span>
             </button>
           </div>
         </section>
 
         <!-- KATALOG HEADER -->
-        <div class="bg-slate-50 border-t-[3.5px] border-[#0f5132] pt-3 pb-2 px-4 shadow-sm relative z-20">
+        <div class="bg-slate-50 border-t-[3px] border-[#0f5132] pt-2.5 pb-2 px-4 shadow-sm relative z-20">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-2">
-              <div class="w-1 h-5 bg-amber-500 rounded-full"></div>
-              <h2 id="katalog-title" class="text-base font-extrabold text-slate-900 tracking-tight">Katalog Materi</h2>
+              <div class="w-1 h-4 bg-amber-500 rounded-full"></div>
+              <h2 id="katalog-title" class="text-[14px] font-extrabold text-slate-900 tracking-tight">Katalog Materi</h2>
             </div>
-            <span id="videoCount" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-[#0f5132] border border-emerald-200 shadow-sm">Memuat...</span>
+            <span id="videoCount" class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-[#0f5132] border border-emerald-200 shadow-sm">Memuat...</span>
           </div>
         </div>
       </div>
@@ -133,8 +141,8 @@
           </div>
         </div>
         
-        <div class="space-y-5 pt-3">
-          <div id="videoContainer" class="flex flex-col gap-5 hidden"></div>
+        <div class="space-y-4 pt-3">
+          <div id="videoContainer" class="flex flex-col gap-4 hidden"></div>
         </div>
       </main>
     </div>
@@ -145,7 +153,6 @@
     let activeCategory = 'Video'; 
     const CACHE_KEY = 'kbihu_materi_data';
 
-    // PASTIKAN API URL ANDA BENAR DI SINI
     const API_URL = "https://script.google.com/macros/s/AKfycbwdILFBt9-j3tdGr7eL7EOoQNaqMdmbDwzCB8EAKfQBJArgpHmsqg4I-5KUmsBTtqPKCQ/exec";
 
     window.onload = function() {
@@ -195,7 +202,7 @@
       document.getElementById('videoCount').innerText = filtered.length + " " + activeCategory;
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div class="text-center py-10"><p class="text-slate-500 text-sm font-medium">Data belum tersedia.</p></div>';
+        container.innerHTML = '<div class="text-center py-8"><p class="text-slate-500 text-xs font-medium">Data belum tersedia.</p></div>';
         return;
       }
 
@@ -219,8 +226,8 @@
             </div>`;
           
           actionBtnHtml = `
-            <button class="w-full py-3 px-4 bg-gradient-to-r from-amber-500 to-[#0f5132] text-white font-bold rounded-xl text-sm flex items-center justify-center space-x-2 shadow-md" onclick="playMedia('${mediaId}')">
-              <i class="fa-solid ${btnIcon} text-sm"></i><span>${btnText}</span>
+            <button class="w-full py-2.5 px-4 bg-gradient-to-r from-amber-500 to-[#0f5132] text-white font-bold rounded-lg text-[13px] flex items-center justify-center space-x-2 shadow-sm" onclick="playMedia('${mediaId}')">
+              <i class="fa-solid ${btnIcon} text-[13px]"></i><span>${btnText}</span>
             </button>`;
 
         } else {
@@ -234,37 +241,37 @@
             </div>`;
           
           actionBtnHtml = `
-            <div class="w-full py-2.5 px-4 bg-emerald-50 text-[#0f5132] border border-emerald-200 font-bold rounded-xl text-xs flex items-center justify-center space-x-2">
-              <i class="fa-brands fa-youtube text-red-600 text-sm"></i><span>Video diputar langsung di dalam aplikasi</span>
+            <div class="w-full py-2 px-3 bg-emerald-50 text-[#0f5132] border border-emerald-200 font-bold rounded-lg text-[11px] flex items-center justify-center space-x-1.5">
+              <i class="fa-brands fa-youtube text-red-600 text-[13px]"></i><span>Video diputar langsung di dalam aplikasi</span>
             </div>`;
         }
 
-        const pemateriHtml = !isFoto ? `<div class="flex items-center gap-2"><i class="fa-solid fa-chalkboard-user text-[#0f5132] w-4 text-center"></i><span class="font-semibold text-slate-800">Pemateri:</span> <span class="truncate">${item.pemateri}</span></div>` : '';
+        const pemateriHtml = !isFoto ? `<div class="flex items-center gap-1.5"><i class="fa-solid fa-chalkboard-user text-[#0f5132] w-3 text-center"></i><span class="font-semibold text-slate-800">Pemateri:</span> <span class="truncate">${item.pemateri}</span></div>` : '';
         const titleIcon = isFoto ? 'fa-images text-amber-500' : 'fa-circle-play text-[#0f5132]';
 
         const card = document.createElement('article');
-        card.className = 'bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-lg hover:shadow-xl transition-shadow duration-300';
+        card.className = 'bg-white rounded-xl overflow-hidden border border-slate-200 shadow hover:shadow-md transition-shadow duration-300';
         
         card.innerHTML = `
           ${mediaBoxHtml}
-          <div class="p-4 space-y-3.5">
+          <div class="p-3.5 space-y-2.5">
             <div>
-              <div class="flex items-start gap-2.5">
-                <i class="fa-solid ${titleIcon} mt-1 text-sm shrink-0"></i>
-                <h3 class="text-[17px] font-bold text-slate-900 leading-snug tracking-tight">${item.judul}</h3>
+              <div class="flex items-start gap-2">
+                <i class="fa-solid ${titleIcon} mt-0.5 text-[13px] shrink-0"></i>
+                <h3 class="text-[15px] font-bold text-slate-900 leading-snug tracking-tight">${item.judul}</h3>
               </div>
-              <p class="text-[13px] text-slate-500 mt-1.5 leading-relaxed line-clamp-2 cursor-pointer hover:text-slate-700 transition-colors duration-300" onclick="this.classList.toggle('line-clamp-2')" title="Klik teks untuk membaca selengkapnya">
+              <p class="text-[11.5px] text-slate-500 mt-1 leading-relaxed line-clamp-2 cursor-pointer hover:text-slate-700 transition-colors duration-300" onclick="this.classList.toggle('line-clamp-2')" title="Klik teks untuk membaca selengkapnya">
                 ${item.deskripsi}
               </p>
             </div>
             
-            <div class="bg-slate-50 rounded-xl p-3 border border-slate-100 space-y-2 text-[12px] text-slate-600">
+            <div class="bg-slate-50 rounded-lg p-2.5 border border-slate-100 space-y-1.5 text-[10.5px] text-slate-600">
               ${pemateriHtml}
-              <div class="flex items-center gap-2"><i class="fa-regular fa-calendar-days text-[#0f5132] w-4 text-center"></i><span class="font-semibold text-slate-800">Waktu:</span> <span>${item.tanggal}</span></div>
-              <div class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-[#0f5132] w-4 text-center"></i><span class="font-semibold text-slate-800">Lokasi:</span> <span>${item.lokasi}</span></div>
+              <div class="flex items-center gap-1.5"><i class="fa-regular fa-calendar-days text-[#0f5132] w-3 text-center"></i><span class="font-semibold text-slate-800">Waktu:</span> <span>${item.tanggal}</span></div>
+              <div class="flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-[#0f5132] w-3 text-center"></i><span class="font-semibold text-slate-800">Lokasi:</span> <span>${item.lokasi}</span></div>
             </div>
             
-            <div class="pt-1">
+            <div class="pt-0.5">
               ${actionBtnHtml}
             </div>
           </div>`;
@@ -277,8 +284,8 @@
       const tV = document.getElementById('tab-Video'), tF = document.getElementById('tab-Foto');
       const title = document.getElementById('katalog-title');
       
-      const activeClass = "flex-1 py-2.5 px-3 rounded-t-2xl bg-[#0f5132] text-white font-bold flex items-center justify-center space-x-1.5 transition-all relative z-10";
-      const inactiveClass = "flex-1 py-2 px-3 rounded-t-2xl bg-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-300 font-semibold flex items-center justify-center space-x-1.5 transition-all shadow-inner relative z-0";
+      const activeClass = "flex-1 py-1.5 px-3 rounded-t-xl bg-[#0f5132] text-white font-bold text-[13px] flex items-center justify-center space-x-1.5 transition-all relative z-10";
+      const inactiveClass = "flex-1 py-1.5 px-3 rounded-t-xl bg-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-300 font-semibold text-[13px] flex items-center justify-center space-x-1.5 transition-all relative z-0";
       
       if (categoryName === 'Video') {
         title.innerText = 'Katalog Materi';
@@ -295,20 +302,20 @@
     function playMedia(id) { window.open('https://drive.google.com/open?id=' + id, '_blank'); }
 
     function showError(error) {
-      Swal.fire({ icon: 'error', title: 'Terjadi Kesalahan', text: 'Periksa koneksi Anda.', confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-2xl' } });
+      Swal.fire({ icon: 'error', title: 'Terjadi Kesalahan', text: 'Periksa koneksi Anda.', confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-xl' } });
     }
 
     function checkAdminPIN() {
       Swal.fire({
-        title: '<span class="font-extrabold text-slate-800 tracking-tight">Akses Admin</span>',
+        title: '<span class="font-extrabold text-slate-800 tracking-tight text-lg">Akses Admin</span>',
         html: `
           <div class="mt-2 font-sans">
-            <p class="text-sm text-slate-500 mb-4">Masukkan kode rahasia untuk menambah materi.</p>
-            <div class="relative max-w-[16rem] mx-auto">
+            <p class="text-[13px] text-slate-500 mb-4">Masukkan kode rahasia untuk menambah materi.</p>
+            <div class="relative max-w-[15rem] mx-auto">
               <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <i class="fa-solid fa-lock text-slate-400 text-sm"></i>
               </div>
-              <input type="password" id="swal-pin" class="custom-input pl-12 text-center tracking-[0.4em] font-extrabold text-lg" placeholder="••••••" autocomplete="off">
+              <input type="password" id="swal-pin" class="custom-input pl-11 text-center tracking-[0.4em] font-extrabold text-base" placeholder="••••••" autocomplete="off">
             </div>
           </div>
         `,
@@ -317,16 +324,13 @@
         cancelButtonText: 'Batal',
         buttonsStyling: false,
         customClass: {
-          popup: 'rounded-[1.5rem]',
-          confirmButton: 'bg-gradient-to-r from-amber-500 to-[#0f5132] text-white rounded-xl font-bold px-6 py-2.5 shadow-md hover:shadow-lg mr-3 focus:outline-none', 
-          cancelButton: 'bg-slate-200 text-slate-700 hover:bg-slate-300 rounded-xl font-bold px-6 py-2.5 transition-colors focus:outline-none'
+          popup: 'rounded-[1.25rem]',
+          confirmButton: 'bg-gradient-to-r from-amber-500 to-[#0f5132] text-white rounded-lg font-bold px-5 py-2 shadow-sm hover:shadow-md mr-2 text-[13px]', 
+          cancelButton: 'bg-slate-200 text-slate-700 hover:bg-slate-300 rounded-lg font-bold px-5 py-2 transition-colors text-[13px]'
         },
         preConfirm: () => {
           const pin = document.getElementById('swal-pin').value;
-          if (!pin) {
-            Swal.showValidationMessage('Kode rahasia tidak boleh kosong!');
-            return false;
-          }
+          if (!pin) { Swal.showValidationMessage('Kode rahasia wajib diisi!'); return false; }
           return pin;
         }
       }).then((result) => {
@@ -335,8 +339,8 @@
             showAddModal(); 
           } else {
             Swal.fire({
-              icon: 'error', title: 'Akses Ditolak', text: 'Kode rahasia yang Anda masukkan salah!',
-              confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-[1.5rem]' }
+              icon: 'error', title: 'Ditolak', text: 'Kode rahasia salah!',
+              confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-[1.25rem]' }
             });
           }
         }
@@ -348,15 +352,15 @@
       const acceptType = isVideo ? 'video/*,image/*' : 'image/*';
       
       Swal.fire({
-        title: `<span class="font-extrabold text-slate-800 tracking-tight">Upload ${activeCategory}</span>`,
+        title: `<span class="font-extrabold text-slate-800 tracking-tight text-lg">Upload ${activeCategory}</span>`,
         html: `
-          <div class="space-y-4 font-sans text-left mt-3">
+          <div class="space-y-3.5 font-sans text-left mt-3">
             <div>
-              <label for="swal-file" class="flex flex-col items-center justify-center w-full h-28 border-2 border-[#0f5132]/30 border-dashed rounded-2xl cursor-pointer bg-emerald-50/50 hover:bg-emerald-50 transition-colors group">
-                <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                  <i class="fa-solid fa-cloud-arrow-up text-3xl text-[#0f5132] mb-2 group-hover:scale-110 transition-transform"></i>
-                  <p class="text-sm font-bold text-slate-700">Pilih dari Galeri / Kamera</p>
-                  <p class="text-[10px] text-slate-500 mt-1 uppercase tracking-wider">Maks. 20MB (Video) | Semua Foto</p>
+              <label for="swal-file" class="flex flex-col items-center justify-center w-full h-24 border-2 border-[#0f5132]/30 border-dashed rounded-xl cursor-pointer bg-emerald-50/50 hover:bg-emerald-50 transition-colors group">
+                <div class="flex flex-col items-center justify-center pt-4 pb-4">
+                  <i class="fa-solid fa-cloud-arrow-up text-2xl text-[#0f5132] mb-1.5 group-hover:scale-110 transition-transform"></i>
+                  <p class="text-[12px] font-bold text-slate-700">Pilih Galeri / Kamera</p>
+                  <p class="text-[9px] text-slate-500 mt-0.5 uppercase tracking-wider">Maks. 20MB (Video)</p>
                 </div>
                 <input id="swal-file" type="file" accept="${acceptType}" class="hidden" onchange="
                   const name = this.files[0] ? this.files[0].name : '';
@@ -364,69 +368,64 @@
                   if(name) { display.innerHTML = '<i class=\\'fa-solid fa-check-circle mr-1\\'></i> ' + name; display.classList.remove('hidden'); } else { display.classList.add('hidden'); }
                 " />
               </label>
-              <div id="file-name-display" class="text-xs text-center text-[#0f5132] font-bold mt-2 hidden bg-emerald-100 p-2 rounded-lg truncate border border-emerald-200"></div>
+              <div id="file-name-display" class="text-[10px] text-center text-[#0f5132] font-bold mt-1.5 hidden bg-emerald-100 p-1.5 rounded-md truncate border border-emerald-200"></div>
             </div>
 
-            <div class="flex items-center gap-3 py-1">
-              <div class="h-px bg-slate-200 flex-1"></div>
-              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Detail Informasi</span>
-              <div class="h-px bg-slate-200 flex-1"></div>
-            </div>
-
-            <div class="space-y-3">
+            <div class="space-y-2.5">
               <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <i class="fa-solid fa-heading text-slate-400 text-sm"></i>
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <i class="fa-solid fa-heading text-slate-400 text-[11px]"></i>
                 </div>
-                <input id="swal-judul" class="custom-input pl-10" placeholder="Judul Materi / Foto...">
+                <input id="swal-judul" class="custom-input pl-8 py-2 text-[12px]" placeholder="Judul Materi...">
               </div>
               
               <div class="relative">
-                <div class="absolute top-3.5 left-0 pl-3.5 flex items-start pointer-events-none">
-                  <i class="fa-solid fa-align-left text-slate-400 text-sm"></i>
+                <div class="absolute top-2.5 left-0 pl-3 flex items-start pointer-events-none">
+                  <i class="fa-solid fa-align-left text-slate-400 text-[11px]"></i>
                 </div>
-                <textarea id="swal-deskripsi" class="custom-input pl-10 py-3" placeholder="Tuliskan keterangan singkat..." rows="2"></textarea>
+                <textarea id="swal-deskripsi" class="custom-input pl-8 py-2 text-[12px]" placeholder="Keterangan singkat..." rows="2"></textarea>
               </div>
               
               ${isVideo ? `
               <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <i class="fa-solid fa-user-tie text-slate-400 text-sm"></i>
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <i class="fa-solid fa-user-tie text-slate-400 text-[11px]"></i>
                 </div>
-                <input id="swal-pemateri" class="custom-input pl-10" placeholder="Nama Pemateri / Ustadz">
+                <input id="swal-pemateri" class="custom-input pl-8 py-2 text-[12px]" placeholder="Pemateri / Ustadz">
               </div>` : ''}
               
-              <div class="grid grid-cols-2 gap-3">
+              <div class="grid grid-cols-2 gap-2">
                 <div class="relative">
-                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <i class="fa-solid fa-calendar text-slate-400 text-sm"></i>
+                  <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-calendar text-slate-400 text-[11px]"></i>
                   </div>
-                  <input id="swal-tanggal" class="custom-input pl-10" placeholder="Contoh: 13 Sep 2026">
+                  <input id="swal-tanggal" class="custom-input pl-7 py-2 text-[11px]" placeholder="13 Sep 2026">
                 </div>
                 <div class="relative">
-                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <i class="fa-solid fa-location-dot text-slate-400 text-sm"></i>
+                  <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-location-dot text-slate-400 text-[11px]"></i>
                   </div>
-                  <input id="swal-lokasi" class="custom-input pl-10" placeholder="Lokasi">
+                  <input id="swal-lokasi" class="custom-input pl-7 py-2 text-[11px]" placeholder="Lokasi">
                 </div>
               </div>
             </div>
           </div>
         `,
         showCancelButton: true,
-        confirmButtonText: '<i class="fa-solid fa-paper-plane mr-2"></i>Kirim & Simpan',
+        confirmButtonText: '<i class="fa-solid fa-paper-plane mr-1.5"></i>Simpan',
         cancelButtonText: 'Batal',
         buttonsStyling: false,
         customClass: { 
-          confirmButton: 'bg-gradient-to-r from-amber-500 to-[#0f5132] text-white rounded-xl font-bold px-5 py-2.5 shadow-md hover:shadow-lg mr-3 focus:outline-none w-full sm:w-auto mb-2 sm:mb-0', 
-          cancelButton: 'bg-slate-200 text-slate-700 hover:bg-slate-300 rounded-xl font-bold px-5 py-2.5 transition-colors focus:outline-none w-full sm:w-auto' 
+          popup: 'rounded-[1.25rem]',
+          confirmButton: 'bg-gradient-to-r from-amber-500 to-[#0f5132] text-white rounded-lg font-bold px-4 py-2 shadow-sm hover:shadow-md mr-2 text-[12px]', 
+          cancelButton: 'bg-slate-200 text-slate-700 hover:bg-slate-300 rounded-lg font-bold px-4 py-2 transition-colors text-[12px]' 
         },
         preConfirm: () => {
           const judul = document.getElementById('swal-judul').value.trim();
           const fileInput = document.getElementById('swal-file');
           
           if (!judul || fileInput.files.length === 0) {
-            Swal.showValidationMessage('Ups! File dan Judul belum diisi.');
+            Swal.showValidationMessage('File dan Judul belum diisi!');
             return false;
           }
           
@@ -484,8 +483,8 @@
 
     function uploadDataToGoogle(data) {
       Swal.fire({ 
-        title: 'Sedang Mengunggah...', 
-        html: '<span class="text-sm text-slate-500">Menyimpan file ke database, harap tunggu sebentar.</span>', 
+        title: 'Mengunggah...', 
+        html: '<span class="text-[12px] text-slate-500">Menyimpan ke database, harap tunggu.</span>', 
         allowOutsideClick: false, 
         didOpen: () => { Swal.showLoading(); } 
       });
@@ -505,15 +504,16 @@
       .then(() => {
         localStorage.removeItem(CACHE_KEY); 
         Swal.fire({ 
-          icon: 'success', title: 'Berhasil!', text: 'File telah dikirim ke server.', 
-          confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-[1.5rem]' } 
+          icon: 'success', title: 'Berhasil!', text: 'File telah disimpan.', 
+          confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-[1.25rem]' } 
         }).then(() => { setTimeout(() => { window.location.reload(); }, 1000); });
       })
       .catch(error => {
-        Swal.fire({ icon: 'error', title: 'Upload Gagal', text: 'Terjadi masalah jaringan.', confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-[1.5rem]' } });
+        Swal.fire({ icon: 'error', title: 'Gagal', text: 'Terjadi masalah jaringan.', confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-[1.25rem]' } });
       });
     }
 
+    // PULL TO REFRESH
     const mainContent = document.getElementById('main-content');
     const ptrContainer = document.getElementById('ptr-container');
     const ptrIconBox = document.getElementById('ptr-icon-box');
