@@ -30,7 +30,6 @@
     .swal2-popup { border-radius: 1.5rem !important; font-family: "Plus Jakarta Sans", sans-serif; padding: 1.5rem !important; }
     .swal2-title { font-size: 1.25rem !important; color: #1e293b !important; padding-top: 0 !important; }
     
-    /* CSS Khusus Form Input yang Baru */
     .custom-input { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.75rem 1rem; font-size: 0.875rem; outline: none; transition: all 0.2s; color: #1e293b; }
     .custom-input::placeholder { color: #94a3b8; font-weight: 500; }
     .custom-input:focus { border-color: #0f5132; box-shadow: 0 0 0 3px rgba(15, 81, 50, 0.15); background-color: #ffffff; }
@@ -71,7 +70,8 @@
               </div>
             </div>
             
-            <button onclick="showAddModal()" class="w-9 h-9 bg-gradient-to-br from-amber-500 to-[#0f5132] text-white rounded-full flex items-center justify-center shrink-0 hover:scale-105 shadow-md transition-all focus:outline-none">
+            <!-- PERUBAHAN: Tombol Tambah sekarang memanggil checkAdminPIN() -->
+            <button onclick="checkAdminPIN()" class="w-9 h-9 bg-gradient-to-br from-amber-500 to-[#0f5132] text-white rounded-full flex items-center justify-center shrink-0 hover:scale-105 shadow-md transition-all focus:outline-none">
               <i class="fa-solid fa-plus text-sm"></i>
             </button>
           </div>
@@ -174,7 +174,6 @@
       filtered.forEach(item => {
         const isFoto = (activeCategory === 'Foto');
         const mediaId = item.id_media ? item.id_media.trim() : '';
-        
         const isYouTube = mediaId.length > 0 && (mediaId.length === 11 || mediaId.includes('youtu') || mediaId.length < 15);
         
         let mediaBoxHtml = '';
@@ -268,20 +267,57 @@
       Swal.fire({ icon: 'error', title: 'Terjadi Kesalahan', text: 'Periksa koneksi Anda.', confirmButtonColor: '#0f5132', customClass: { popup: 'rounded-2xl' } });
     }
 
+
     // =========================================================
-    // DESAIN FORMULIR BARU (LEBIH ELEGAN & TERSTRUKTUR)
+    // FITUR BARU: VERIFIKASI PIN ADMIN
     // =========================================================
+    function checkAdminPIN() {
+      Swal.fire({
+        title: '<span class="font-extrabold text-slate-800 tracking-tight">Akses Admin</span>',
+        html: '<p class="text-sm text-slate-500 mb-2">Masukkan PIN rahasia untuk menambah materi.</p>',
+        input: 'password',
+        inputAttributes: {
+          autocapitalize: 'off',
+          autocorrect: 'off',
+          placeholder: 'Masukkan PIN'
+        },
+        showCancelButton: true,
+        confirmButtonText: '<i class="fa-solid fa-unlock-keyhole mr-1"></i> Masuk',
+        cancelButtonText: 'Batal',
+        customClass: {
+          popup: 'rounded-[1.5rem]',
+          input: 'custom-input text-center text-lg font-bold tracking-widest',
+          confirmButton: 'bg-gradient-to-r from-amber-500 to-[#0f5132] text-white rounded-xl font-bold px-5 py-2.5 shadow-md hover:shadow-lg mr-3 focus:outline-none w-full sm:w-auto mb-2 sm:mb-0', 
+          cancelButton: 'bg-slate-200 text-slate-700 hover:bg-slate-300 rounded-xl font-bold px-5 py-2.5 transition-colors focus:outline-none w-full sm:w-auto'
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // --- GANTI ANGKA 123456 DI BAWAH INI DENGAN PIN RAHASIA ANDA ---
+          if (result.value === 'KBIHU26') {
+            showAddModal(); // Jika PIN Benar, Buka form upload
+          } else {
+            // Jika PIN Salah
+            Swal.fire({
+              icon: 'error',
+              title: 'Akses Ditolak',
+              text: 'PIN yang Anda masukkan salah!',
+              confirmButtonColor: '#0f5132',
+              customClass: { popup: 'rounded-[1.5rem]' }
+            });
+          }
+        }
+      });
+    }
+
+
     function showAddModal() {
       const isVideo = activeCategory === 'Video';
-      // Menghapus atribut "capture" agar OS memunculkan opsi Galeri / File Manager
       const acceptType = isVideo ? 'video/*,image/*' : 'image/*';
       
       Swal.fire({
         title: `<span class="font-extrabold text-slate-800 tracking-tight">Upload ${activeCategory}</span>`,
         html: `
           <div class="space-y-4 font-sans text-left mt-3">
-            
-            <!-- Zona Upload File (Dropzone) -->
             <div>
               <label for="swal-file" class="flex flex-col items-center justify-center w-full h-28 border-2 border-[#0f5132]/30 border-dashed rounded-2xl cursor-pointer bg-emerald-50/50 hover:bg-emerald-50 transition-colors group">
                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -289,7 +325,6 @@
                   <p class="text-sm font-bold text-slate-700">Pilih dari Galeri / Kamera</p>
                   <p class="text-[10px] text-slate-500 mt-1 uppercase tracking-wider">Maks. 20MB (Video) | Semua Foto</p>
                 </div>
-                <!-- Input asli disembunyikan, event onchange dipakai untuk memunculkan nama file -->
                 <input id="swal-file" type="file" accept="${acceptType}" class="hidden" onchange="
                   const name = this.files[0] ? this.files[0].name : '';
                   const display = document.getElementById('file-name-display');
@@ -299,14 +334,12 @@
               <div id="file-name-display" class="text-xs text-center text-[#0f5132] font-bold mt-2 hidden bg-emerald-100 p-2 rounded-lg truncate border border-emerald-200"></div>
             </div>
 
-            <!-- Pembatas Elegan -->
             <div class="flex items-center gap-3 py-1">
               <div class="h-px bg-slate-200 flex-1"></div>
               <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Detail Informasi</span>
               <div class="h-px bg-slate-200 flex-1"></div>
             </div>
 
-            <!-- Kolom Isian dengan Ikon di dalamnya -->
             <div class="space-y-3">
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
